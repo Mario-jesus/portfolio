@@ -1,0 +1,304 @@
+<div class="min-h-screen bg-white dark:bg-slate-900 transition-colors duration-300 py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Header Section -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-emerald-500 via-blue-500 to-purple-500 rounded-2xl mb-6 shadow-lg header-icon">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+        </svg>
+      </div>
+      
+      <h1 class="text-5xl font-black text-slate-800 dark:text-white mb-4">
+        Hablemos <span class="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent gradient-text">Juntos</span>
+      </h1>
+      
+      <p class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+        ¿Tienes un proyecto en mente? ¿Quieres colaborar? ¡Me encantaría escuchar de ti! 
+        Envíame un mensaje y conversemos sobre cómo puedo ayudarte.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      
+      <!-- Contact Form -->
+      <div class="order-2 lg:order-1 contact-form">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 p-8">
+          
+          <!-- Success Message -->
+          <div *ngIf="isSubmitted()" class="mb-8 p-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl success-message">
+            <div class="flex items-center">
+              <svg class="w-6 h-6 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <div>
+                <h3 class="text-lg font-semibold text-green-800 dark:text-green-200">¡Mensaje enviado!</h3>
+                <p class="text-green-700 dark:text-green-300">Gracias por contactarme. Te responderé pronto.</p>
+              </div>
+            </div>
+            <button 
+              (click)="resetForm()"
+              class="mt-4 text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-200 font-medium transition-colors duration-200"
+            >
+              Enviar otro mensaje
+            </button>
+          </div>
+
+          <!-- Error Message -->
+          <div *ngIf="submitError()" class="mb-8 p-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl error-message">
+            <div class="flex items-center">
+              <svg class="w-6 h-6 text-red-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <div>
+                <h3 class="text-lg font-semibold text-red-800 dark:text-red-200">Error</h3>
+                <p class="text-red-700 dark:text-red-300">{{ submitError() }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Form -->
+          <form *ngIf="!isSubmitted()" [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="space-y-6">
+            
+            <!-- Name and Email Row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Name Field -->
+              <div>
+                <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Nombre *
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  formControlName="name"
+                  [class]="isFieldInvalid('name') 
+                    ? 'border-red-300 dark:border-red-600 focus:ring-red-500 focus:border-red-500' 
+                    : 'border-gray-300 dark:border-slate-600 focus:ring-emerald-500 focus:border-emerald-500'"
+                  class="block w-full px-4 py-3 rounded-xl border bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 transition-colors duration-200"
+                  placeholder="Tu nombre completo"
+                />
+                <p *ngIf="getFieldError('name')" class="mt-2 text-sm text-red-600 dark:text-red-400">
+                  {{ getFieldError('name') }}
+                </p>
+              </div>
+
+              <!-- Email Field -->
+              <div>
+                <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  formControlName="email"
+                  [class]="isFieldInvalid('email') 
+                    ? 'border-red-300 dark:border-red-600 focus:ring-red-500 focus:border-red-500' 
+                    : 'border-gray-300 dark:border-slate-600 focus:ring-emerald-500 focus:border-emerald-500'"
+                  class="block w-full px-4 py-3 rounded-xl border bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 transition-colors duration-200"
+                  placeholder="tu@email.com"
+                />
+                <p *ngIf="getFieldError('email')" class="mt-2 text-sm text-red-600 dark:text-red-400">
+                  {{ getFieldError('email') }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Phone and Company Row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Phone Field -->
+              <div>
+                <label for="phoneNumber" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Teléfono
+                </label>
+                <input
+                  type="tel"
+                  id="phoneNumber"
+                  formControlName="phoneNumber"
+                  class="block w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors duration-200"
+                  placeholder="+52 55 1234 5678"
+                />
+              </div>
+
+              <!-- Company Field -->
+              <div>
+                <label for="company" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Empresa
+                </label>
+                <input
+                  type="text"
+                  id="company"
+                  formControlName="company"
+                  class="block w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors duration-200"
+                  placeholder="Tu empresa"
+                />
+              </div>
+            </div>
+
+            <!-- Subject Field -->
+            <div>
+              <label for="subject" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                Asunto *
+              </label>
+              <input
+                type="text"
+                id="subject"
+                formControlName="subject"
+                [class]="isFieldInvalid('subject') 
+                  ? 'border-red-300 dark:border-red-600 focus:ring-red-500 focus:border-red-500' 
+                  : 'border-gray-300 dark:border-slate-600 focus:ring-emerald-500 focus:border-emerald-500'"
+                class="block w-full px-4 py-3 rounded-xl border bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 transition-colors duration-200"
+                placeholder="¿De qué quieres hablar?"
+              />
+              <p *ngIf="getFieldError('subject')" class="mt-2 text-sm text-red-600 dark:text-red-400">
+                {{ getFieldError('subject') }}
+              </p>
+            </div>
+
+            <!-- Message Field -->
+            <div>
+              <label for="message" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                Mensaje *
+              </label>
+              <textarea
+                id="message"
+                formControlName="message"
+                rows="6"
+                [class]="isFieldInvalid('message') 
+                  ? 'border-red-300 dark:border-red-600 focus:ring-red-500 focus:border-red-500' 
+                  : 'border-gray-300 dark:border-slate-600 focus:ring-emerald-500 focus:border-emerald-500'"
+                class="block w-full px-4 py-3 rounded-xl border bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 transition-colors duration-200 resize-none"
+                placeholder="Cuéntame sobre tu proyecto o idea..."
+              ></textarea>
+              <p *ngIf="getFieldError('message')" class="mt-2 text-sm text-red-600 dark:text-red-400">
+                {{ getFieldError('message') }}
+              </p>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              [disabled]="isSubmitting()"
+              class="w-full flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl"
+            >
+              <svg *ngIf="isSubmitting()" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              {{ isSubmitting() ? 'Enviando...' : 'Enviar Mensaje' }}
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="order-1 lg:order-2 contact-info">
+        <div class="space-y-8">
+          
+          <!-- Contact Info Card -->
+          <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 p-8 contact-info-card">
+            <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Información de Contacto</h2>
+            
+            <div class="space-y-6" *ngIf="profile()">
+              <!-- Email -->
+              <div class="flex items-center">
+                <div class="flex-shrink-0 w-12 h-12 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center">
+                  <svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <div class="ml-4">
+                  <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Email</p>
+                  <a [href]="'mailto:' + profile()?.contactInfo?.email" class="text-slate-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors duration-200">
+                    {{ profile()?.contactInfo?.email }}
+                  </a>
+                </div>
+              </div>
+
+              <!-- Phone -->
+              <div class="flex items-center" *ngIf="profile()?.contactInfo?.phone">
+                <div class="flex-shrink-0 w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
+                  <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                  </svg>
+                </div>
+                <div class="ml-4">
+                  <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Teléfono</p>
+                  <a [href]="'tel:' + profile()?.contactInfo?.phone" class="text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
+                    {{ profile()?.contactInfo?.phone }}
+                  </a>
+                </div>
+              </div>
+
+              <!-- Location -->
+              <div class="flex items-center" *ngIf="profile()?.location">
+                <div class="flex-shrink-0 w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center">
+                  <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                </div>
+                <div class="ml-4">
+                  <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Ubicación</p>
+                  <p class="text-slate-900 dark:text-white">{{ profile()?.location }}</p>
+                </div>
+              </div>
+
+              <!-- Availability -->
+              <div class="flex items-center" *ngIf="profile()?.contactInfo?.availability">
+                <div class="flex-shrink-0 w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
+                  <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <div class="ml-4">
+                  <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Disponibilidad</p>
+                  <p class="text-slate-900 dark:text-white">{{ profile()?.contactInfo?.availability }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Links -->
+          <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 p-8 contact-info-card">
+            <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Sígueme en</h2>
+            
+            <div class="grid grid-cols-2 gap-4" *ngIf="profile()?.contactInfo?.socialLinks">
+              <a 
+                *ngFor="let social of profile()?.contactInfo?.socialLinks" 
+                [href]="social.url" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="flex items-center p-4 bg-gray-50 dark:bg-slate-700 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-600 transition-all duration-200 group hover:scale-105 social-link"
+              >
+                <svg 
+                  class="w-6 h-6 text-gray-600 dark:text-gray-300 group-hover:text-emerald-500 transition-colors duration-200" 
+                  fill="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path [attr.d]="getSocialIcon(social.platform)"></path>
+                </svg>
+                <span class="ml-3 text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white transition-colors duration-200">
+                  {{ social.username }}
+                </span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Response Time -->
+          <div class="bg-gradient-to-br from-emerald-500 via-blue-500 to-purple-500 rounded-2xl p-8 text-white response-card">
+            <div class="flex items-center mb-4">
+              <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+              <h3 class="text-xl font-bold">Respuesta Rápida</h3>
+            </div>
+            <p class="text-white/90 leading-relaxed">
+              Normalmente respondo en menos de 24 horas. Si tu proyecto es urgente, 
+              no dudes en mencionarlo en el mensaje.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

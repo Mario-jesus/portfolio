@@ -1,0 +1,103 @@
+// Estilos adicionales para la página de experiencia
+
+// Animaciones para el timeline
+.timeline-item {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.6s ease-out forwards;
+  
+  &:nth-child(even) {
+    animation-delay: 0.1s;
+  }
+  
+  &:nth-child(odd) {
+    animation-delay: 0.2s;
+  }
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Efectos hover para las tarjetas
+.experience-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    
+    .timeline-dot {
+      transform: scale(1.2);
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+    }
+  }
+}
+
+// Gradiente animado para la línea del timeline
+.timeline-line {
+  background: linear-gradient(180deg, #10b981, #3b82f6, #8b5cf6);
+  background-size: 100% 200%;
+  animation: gradientShift 4s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 0% 100%;
+  }
+}
+
+// Efectos para los filtros
+.filter-button {
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+  
+  &:hover::before {
+    left: 100%;
+  }
+}
+
+// Animación para las tecnologías
+.tech-tag {
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .timeline-line {
+    left: 2rem;
+  }
+  
+  .timeline-dot {
+    left: 1.5rem;
+  }
+}
+
+// Dark mode specific styles
+@media (prefers-color-scheme: dark) {
+  .experience-card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  }
+} 

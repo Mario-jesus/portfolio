@@ -1,0 +1,327 @@
+<div class="theme-transition min-h-screen bg-white dark:bg-slate-900 transition-colors duration-300">
+  
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden min-h-screen flex items-center px-4 sm:px-6 lg:px-8">
+    <!-- Animated Background -->
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-emerald-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800"></div>
+    
+    <!-- Floating Geometric Shapes -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute top-20 left-4 sm:left-10 w-16 sm:w-20 h-16 sm:h-20 bg-emerald-500/10 rounded-full animate-float"></div>
+      <div class="absolute top-40 right-4 sm:right-20 w-12 sm:w-16 h-12 sm:h-16 bg-blue-500/10 rounded-lg rotate-45 animate-float" style="animation-delay: 1s;"></div>
+      <div class="absolute bottom-40 left-4 sm:left-20 w-10 sm:w-12 h-10 sm:h-12 bg-purple-500/10 rounded-full animate-float" style="animation-delay: 2s;"></div>
+      <div class="absolute bottom-20 right-8 sm:right-40 w-16 sm:w-24 h-16 sm:h-24 bg-pink-500/10 rounded-lg rotate-12 animate-float" style="animation-delay: 0.5s;"></div>
+    </div>
+    
+    <!-- Grid Pattern -->
+    <div class="absolute inset-0 opacity-20">
+      <div class="w-full h-full" style="background-image: radial-gradient(circle at 1px 1px, rgba(59,130,246,0.1) 1px, transparent 0); background-size: 40px 40px;"></div>
+    </div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+      <div class="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+        
+        <!-- Content -->
+        <div class="animate-fade-in order-2 lg:order-1">
+          <!-- Status Badge -->
+          <div class="inline-flex items-center space-x-2 sm:space-x-3 bg-emerald-50 dark:bg-emerald-900/20 px-3 sm:px-4 py-2 rounded-full border border-emerald-200 dark:border-emerald-800 mb-6">
+            <div class="relative">
+              <div class="w-2 sm:w-3 h-2 sm:h-3 bg-emerald-500 rounded-full"></div>
+              <div class="absolute inset-0 w-2 sm:w-3 h-2 sm:h-3 bg-emerald-500 rounded-full animate-ping"></div>
+            </div>
+            <span class="text-emerald-700 dark:text-emerald-300 font-medium text-xs sm:text-sm">Disponible para proyectos</span>
+          </div>
+          
+          <!-- Main Heading -->
+          <div class="space-y-4 sm:space-y-6">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-slate-900 dark:text-white leading-tight">
+              <span class="block">Hola, soy</span>
+              <span class="block bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500 bg-clip-text text-transparent animate-gradient">
+                {{ profile()?.firstName || 'Mario' }} {{ profile()?.lastName || 'Jesús' }}
+              </span>
+              <span class="wave text-4xl sm:text-5xl lg:text-6xl">👋</span>
+            </h1>
+            
+            <h2 class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-slate-600 dark:text-slate-300">
+              {{ profile()?.title || 'Senior Full Stack Developer' }}
+            </h2>
+            
+            <p class="text-base sm:text-lg lg:text-xl text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed">
+              {{ profile()?.bio || 'Desarrollador apasionado por crear soluciones tecnológicas innovadoras con más de 4 años de experiencia en desarrollo web moderno.' }}
+            </p>
+          </div>
+
+          <!-- Stats -->
+          <div class="grid grid-cols-3 gap-3 sm:gap-6 py-6">
+            <div class="text-center">
+              <div class="text-2xl sm:text-3xl font-bold text-emerald-500">{{ profile()?.yearsOfExperience || 4 }}+</div>
+              <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">Años de experiencia</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl sm:text-3xl font-bold text-blue-500">{{ featuredProjects().length || 15 }}+</div>
+              <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">Proyectos completados</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl sm:text-3xl font-bold text-purple-500">{{ skills().length || 20 }}+</div>
+              <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">Tecnologías</div>
+            </div>
+          </div>
+
+          <!-- CTA Buttons -->
+          <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <a 
+              routerLink="/projects"
+              class="group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-400 hover:to-blue-400 text-white font-semibold rounded-xl hover:shadow-2xl hover:shadow-emerald-500/25 transform hover:scale-[1.02] transition-all duration-500 ease-out bg-[length:200%_200%] hover:animate-[gradient_3s_ease_infinite] text-sm sm:text-base"
+            >
+              <span>Ver Proyectos</span>
+              <svg class="ml-2 w-4 sm:w-5 h-4 sm:h-5 group-hover:translate-x-1 transition-transform duration-300 ease-out" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+            
+            <a 
+              routerLink="/contact"
+              class="group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 font-semibold rounded-xl transition-all duration-500 ease-out hover:scale-[1.02] text-sm sm:text-base"
+            >
+              <span>Contactar</span>
+              <svg class="ml-2 w-4 sm:w-5 h-4 sm:h-5 group-hover:translate-x-1 transition-transform duration-300 ease-out" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+            </a>
+          </div>
+
+          <!-- Social Links -->
+          <div class="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-6 pt-4">
+            <span class="text-slate-500 dark:text-slate-400 font-medium text-sm sm:text-base">Sígueme:</span>
+            <div class="flex space-x-3">
+              <a 
+                *ngFor="let social of profile()?.contactInfo?.socialLinks" 
+                [href]="social.url" 
+                target="_blank"
+                class="group w-10 sm:w-12 h-10 sm:h-12 bg-slate-100 dark:bg-slate-800 hover:bg-gradient-to-r hover:from-emerald-500 hover:to-blue-500 text-slate-600 dark:text-slate-300 hover:text-white rounded-xl flex items-center justify-center transition-all duration-500 ease-out hover:scale-[1.05] hover:shadow-lg bg-[length:200%_200%] hover:animate-[gradient_3s_ease_infinite]"
+              >
+                <span class="text-base sm:text-lg font-bold group-hover:scale-[1.05] transition-transform duration-300 ease-out">{{ getSocialIcon(social.platform) }}</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile Image -->
+        <div class="relative animate-fade-in-right order-1 lg:order-2">
+          <div class="relative w-64 sm:w-80 lg:w-96 h-64 sm:h-80 lg:h-96 mx-auto">
+            <!-- Animated Background Circles -->
+            <div class="absolute inset-0">
+              <div class="absolute top-0 left-0 w-20 sm:w-24 lg:w-32 h-20 sm:h-24 lg:h-32 bg-gradient-to-r from-emerald-400 to-blue-400 rounded-full opacity-20 animate-pulse"></div>
+              <div class="absolute bottom-0 right-0 w-24 sm:w-32 lg:w-40 h-24 sm:h-32 lg:h-40 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full opacity-20 animate-pulse" style="animation-delay: 1s;"></div>
+              <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 sm:w-40 lg:w-48 h-32 sm:h-40 lg:h-48 bg-gradient-to-r from-blue-400 to-emerald-400 rounded-full opacity-10 animate-pulse" style="animation-delay: 2s;"></div>
+            </div>
+            
+            <!-- Main Image Container -->
+            <div class="relative z-10 w-full h-full">
+              <div class="w-full h-full bg-gradient-to-br from-emerald-500 via-blue-500 to-purple-500 p-1 rounded-3xl shadow-2xl">
+                <div class="w-full h-full bg-white dark:bg-slate-900 rounded-3xl overflow-hidden">
+                  <app-progressive-image
+                    [src]="(profile()?.profileImageUrl || '/assets/profile/mario-jesus.jpg') + '?v=' + imageKey()"
+                    [alt]="(profile()?.firstName || 'Mario') + ' ' + (profile()?.lastName || 'Jesús')"
+                    [placeholderSrc]="'/assets/profile/mario-jesus-low.jpg'"
+                    [blurAmount]="5"
+                    [transitionDuration]="300"
+                    class="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-800 ease-in"
+                  ></app-progressive-image>
+                </div>
+              </div>
+            </div>
+            <!-- Floating Achievement Cards -->
+            <div class="hidden sm:block absolute -top-8 lg:-top-15 -right-4 lg:-right-6 bg-white dark:bg-slate-800 p-3 lg:p-4 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 animate-float">
+              <div class="flex items-center space-x-2 lg:space-x-3">
+                <div class="w-6 lg:w-8 h-6 lg:h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+                  <svg class="w-3 lg:w-4 h-3 lg:h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="text-xs lg:text-sm font-bold text-slate-800 dark:text-white">Top Developer</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">2025</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="py-24 bg-slate-50 dark:bg-slate-800/50 relative overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-5">
+      <div class="w-full h-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800"></div>
+    </div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-20">
+        <h2 class="text-4xl lg:text-5xl font-black text-slate-900 dark:text-white mb-6">
+          Tecnologías que 
+          <span class="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">domino</span>
+        </h2>
+        <p class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+          Herramientas y tecnologías con las que construyo soluciones modernas y escalables
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 mb-16">
+        <div 
+          *ngFor="let skill of skills(); trackBy: trackBySkillId" 
+          class="group relative bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg hover:shadow-2xl border border-slate-200 dark:border-slate-700 hover:border-emerald-300 dark:hover:border-emerald-600 transition-all duration-500 ease-out hover:scale-[1.02]"
+        >
+          <!-- Skill Level Indicator -->
+          <div class="absolute top-3 right-3">
+            <div 
+              [class]="'w-3 h-3 rounded-full ' + getSkillLevelColor(skill.level)"
+              [title]="getSkillLevelText(skill.level)"
+            ></div>
+          </div>
+          
+          <div class="flex flex-col items-center text-center space-y-4">
+            <div class="w-16 h-16 flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-600 rounded-xl group-hover:scale-[1.05] transition-transform duration-400 ease-out">
+              <img 
+                [src]="skill.iconUrl" 
+                [alt]="skill.name"
+                class="w-10 h-10 object-contain"
+                loading="lazy"
+              />
+            </div>
+            
+            <div>
+              <h3 class="font-semibold text-slate-800 dark:text-white text-sm group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors duration-400 ease-out">
+                {{ skill.name }}
+              </h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                {{ getSkillLevelText(skill.level) }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Tooltip -->
+          <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-400 ease-out pointer-events-none whitespace-nowrap z-10">
+            {{ skill.description || skill.name }}
+            <div class="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-slate-700"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Projects Section -->
+  <section class="py-24 bg-white dark:bg-slate-900 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-20">
+        <h2 class="text-4xl lg:text-5xl font-black text-slate-900 dark:text-white mb-6">
+          Proyectos 
+          <span class="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">destacados</span>
+        </h2>
+        <p class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+          Una selección de mis trabajos más recientes y significativos
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div 
+          *ngFor="let project of featuredProjects(); trackBy: trackByProjectId" 
+          class="group bg-white dark:bg-slate-800 rounded-2xl shadow-lg hover:shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-500 ease-out hover:scale-[1.02]"
+        >
+          <!-- Project Image -->
+          <div class="relative h-48 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800 overflow-hidden">
+            <img 
+              [src]="project.imageUrl" 
+              [alt]="project.title"
+              class="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-700 ease-out"
+              loading="lazy"
+            />
+            
+            <!-- Status Badge -->
+            <div class="absolute top-4 left-4">
+              <span 
+                [class]="'px-3 py-1 text-xs font-semibold rounded-full ' + 
+                (project.status === 'completed' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300' :
+                 project.status === 'in_progress' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' :
+                 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300')"
+              >
+                {{ project.status === 'completed' ? 'Completado' : 
+                   project.status === 'in_progress' ? 'En progreso' : 'Planeado' }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Project Content -->
+          <div class="p-6 space-y-4">
+            <div>
+              <h3 class="text-xl font-bold text-slate-800 dark:text-white group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors duration-400 ease-out">
+                {{ project.title }}
+              </h3>
+              <p class="text-slate-600 dark:text-slate-300 text-sm mt-2 line-clamp-3">
+                {{ project.description }}
+              </p>
+            </div>
+
+            <!-- Technologies -->
+            <div class="flex flex-wrap gap-2">
+              <span 
+                *ngFor="let tech of project.technologies" 
+                class="px-2 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs rounded-lg font-medium"
+              >
+                {{ tech }}
+              </span>
+            </div>
+
+            <!-- Project Links -->
+            <div class="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-700">
+              <div class="flex space-x-3">
+                <a 
+                  *ngIf="project.demoUrl" 
+                  [href]="project.demoUrl" 
+                  target="_blank"
+                  class="inline-flex items-center text-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium text-sm transition-colors duration-300 ease-out"
+                >
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                  Demo
+                </a>
+                
+                <a 
+                  *ngIf="project.repositoryUrl" 
+                  [href]="project.repositoryUrl" 
+                  target="_blank"
+                  class="inline-flex items-center text-slate-500 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-300 font-medium text-sm transition-colors duration-300 ease-out"
+                >
+                  <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clip-rule="evenodd" />
+                  </svg>
+                  Código
+                </a>
+              </div>
+              
+              <div class="text-xs text-slate-400 dark:text-slate-500">
+                {{ project.startDate | date:'yyyy' }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- View All Projects Button -->
+      <div class="text-center mt-16">
+        <a 
+          routerLink="/projects"
+          class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-400 hover:to-blue-400 text-white font-semibold rounded-xl hover:shadow-2xl hover:shadow-emerald-500/25 transform hover:scale-[1.02] transition-all duration-500 ease-out bg-[length:200%_200%] hover:animate-[gradient_3s_ease_infinite]"
+        >
+          <span>Ver todos los proyectos</span>
+          <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

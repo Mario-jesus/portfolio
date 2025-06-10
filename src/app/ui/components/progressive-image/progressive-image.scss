@@ -1,0 +1,251 @@
+// Progressive Image Component Styles
+
+.progressive-image-container {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+
+  // Loading skeleton
+  .image-skeleton {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: inherit;
+
+    .skeleton-shimmer {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent 25%,
+        rgba(255, 255, 255, 0.5) 50%,
+        transparent 75%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 2s infinite;
+    }
+  }
+
+  // Dark mode skeleton
+  &:global(.dark) .image-skeleton {
+    background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+    
+    .skeleton-shimmer {
+      background: linear-gradient(
+        90deg,
+        transparent 25%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 75%
+      );
+    }
+  }
+
+  // Main image
+  .progressive-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &.loading {
+      filter: blur(10px);
+      transform: scale(1.05);
+      opacity: 0.7;
+    }
+
+    &.loaded {
+      filter: blur(0px);
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    &.error {
+      opacity: 0;
+    }
+  }
+
+  // Loading overlay
+  .loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(2px);
+    transition: opacity 0.3s ease-out;
+
+    .loading-spinner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      svg {
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+      }
+    }
+  }
+
+  // Error overlay
+  .error-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: inherit;
+
+    .error-content {
+      text-align: center;
+      color: #6b7280;
+      
+      svg {
+        margin: 0 auto 0.5rem;
+      }
+    }
+  }
+
+  // Dark mode error overlay
+  &:global(.dark) .error-overlay {
+    background: linear-gradient(135deg, #374151, #4b5563);
+    
+    .error-content {
+      color: #9ca3af;
+    }
+  }
+
+  // Loaded state
+  &.loaded {
+    .loading-overlay {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .image-skeleton {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  // Error state
+  &.error {
+    .loading-overlay {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .image-skeleton {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+}
+
+// Keyframes
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .progressive-image-container {
+    .loading-spinner svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    .error-overlay {
+      .error-content {
+        svg {
+          width: 2rem;
+          height: 2rem;
+        }
+        
+        p {
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+}
+
+// Hover effects for loaded images
+.progressive-image-container.loaded {
+  .progressive-image:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease-out;
+  }
+}
+
+// Focus states for accessibility
+.progressive-image {
+  &:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .progressive-image-container {
+    .image-skeleton {
+      background: #000;
+    }
+
+    .loading-overlay {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .error-overlay {
+      background: #fff;
+      border: 2px solid #000;
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .progressive-image-container {
+    .progressive-image {
+      transition: opacity 0.3s ease-out;
+      
+      &.loading {
+        filter: none;
+        transform: none;
+      }
+
+      &.loaded {
+        filter: none;
+        transform: none;
+      }
+    }
+
+    .image-skeleton,
+    .skeleton-shimmer {
+      animation: none;
+    }
+
+    .loading-spinner svg {
+      animation: none;
+    }
+  }
+}

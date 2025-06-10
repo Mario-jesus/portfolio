@@ -1,0 +1,39 @@
+// Estilos adicionales para el footer
+.footer-social-link {
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.footer-nav-link {
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background: linear-gradient(90deg, #10b981, #3b82f6);
+    transition: width 0.3s ease;
+  }
+  
+  &:hover::before {
+    width: 100%;
+  }
+}
+
+// Animación suave para los iconos
+.footer-icon {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Efecto de hover para las secciones
+.footer-section {
+  &:hover {
+    .footer-title {
+      color: #10b981;
+    }
+  }
+}

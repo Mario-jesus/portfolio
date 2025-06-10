@@ -1,0 +1,132 @@
+<footer class="bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700 transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      
+      <!-- Información Personal -->
+      <div class="lg:col-span-2">
+        <div class="flex items-center space-x-3 mb-4">
+          <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 via-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
+            <span class="text-white font-black text-xl">M</span>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-slate-800 dark:text-white">
+              {{ profile?.firstName || 'Mario Jesús' }} {{ profile?.lastName || 'Arias Hernández' }}
+            </h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400">
+              {{ profile?.title || 'Junior Full Stack Developer' }}
+            </p>
+          </div>
+        </div>
+        
+        <p class="text-slate-600 dark:text-slate-300 mb-6 max-w-md leading-relaxed">
+          {{ profile?.summary || 'Desarrollador Full Stack apasionado por crear soluciones tecnológicas innovadoras con más de 4 años de experiencia.' }}
+        </p>
+        
+        <!-- Redes Sociales -->
+        <div class="flex space-x-4" *ngIf="profile?.contactInfo?.socialLinks">
+          <a 
+            *ngFor="let social of profile?.contactInfo?.socialLinks" 
+            [href]="social.url" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="w-10 h-10 bg-gray-100 dark:bg-slate-700 hover:bg-emerald-500 dark:hover:bg-emerald-500 rounded-lg flex items-center justify-center transition-all duration-300 group hover:scale-110 hover:shadow-lg"
+            [attr.aria-label]="'Visitar perfil de ' + social.platform"
+          >
+            <svg 
+              class="w-5 h-5 text-gray-600 dark:text-gray-300 group-hover:text-white transition-colors duration-300" 
+              fill="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path [attr.d]="getSocialIcon(social.platform)"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Enlaces Rápidos -->
+      <div>
+        <h4 class="text-lg font-semibold text-slate-800 dark:text-white mb-4">Enlaces Rápidos</h4>
+        <ul class="space-y-3">
+          <li *ngFor="let item of navigationItems">
+            <a 
+              [routerLink]="item.path" 
+              class="text-slate-600 dark:text-slate-300 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors duration-200 flex items-center group"
+            >
+              <svg class="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+              {{ item.label }}
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- Información de Contacto -->
+      <div>
+        <h4 class="text-lg font-semibold text-slate-800 dark:text-white mb-4">Contacto</h4>
+        <div class="space-y-3">
+          <div class="flex items-center text-slate-600 dark:text-slate-300" *ngIf="profile?.contactInfo?.email">
+            <svg class="w-5 h-5 mr-3 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+            <a [href]="'mailto:' + profile?.contactInfo?.email" class="hover:text-emerald-500 transition-colors duration-200">
+              {{ profile?.contactInfo?.email }}
+            </a>
+          </div>
+          
+          <div class="flex items-center text-slate-600 dark:text-slate-300" *ngIf="profile?.contactInfo?.phone">
+            <svg class="w-5 h-5 mr-3 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+            </svg>
+            <a [href]="'tel:' + profile?.contactInfo?.phone" class="hover:text-emerald-500 transition-colors duration-200">
+              {{ profile?.contactInfo?.phone }}
+            </a>
+          </div>
+          
+          <div class="flex items-start text-slate-600 dark:text-slate-300" *ngIf="profile?.location">
+            <svg class="w-5 h-5 mr-3 mt-0.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            <span>{{ profile?.location }}</span>
+          </div>
+          
+          <div class="flex items-center text-slate-600 dark:text-slate-300" *ngIf="profile?.contactInfo?.availability">
+            <svg class="w-5 h-5 mr-3 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-sm">{{ profile?.contactInfo?.availability }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Línea divisoria -->
+    <div class="border-t border-gray-200 dark:border-slate-700 mt-8 pt-8">
+      <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+        
+        <!-- Copyright -->
+        <div class="text-center md:text-left">
+          <p class="text-slate-600 dark:text-slate-400 text-sm">
+            © {{ currentYear }} {{ profile?.firstName || 'Mario Jesús' }} {{ profile?.lastName || 'Arias Hernández' }}. 
+            Todos los derechos reservados.
+          </p>
+        </div>
+        
+        <!-- Tecnologías -->
+        <div class="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400">
+          <span>Hecho con</span>
+          <div class="flex items-center space-x-1">
+            <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            <span>usando</span>
+            <span class="font-medium text-slate-600 dark:text-slate-300">Angular</span>
+            <span>&</span>
+            <span class="font-medium text-slate-600 dark:text-slate-300">TailwindCSS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

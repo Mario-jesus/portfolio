@@ -1,0 +1,147 @@
+/* You can add global styles to this file, and also import other style files */
+@use 'normalize.css';
+@use "tailwindcss";
+
+/* Configure dark mode for TailwindCSS v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Custom Theme Variables for TailwindCSS v4 */
+@theme {
+  /* Custom Colors */
+  --color-primary: oklch(0.696 0.17 162.48);
+  --color-secondary: oklch(0.588 0.158 241.966);
+  --color-accent: oklch(0.696 0.17 162.48);
+  
+  /* Dark theme colors */
+  --color-dark-50: oklch(0.985 0.002 247.839);
+  --color-dark-100: oklch(0.967 0.003 264.542);
+  --color-dark-200: oklch(0.928 0.006 264.531);
+  --color-dark-300: oklch(0.872 0.01 258.338);
+  --color-dark-400: oklch(0.707 0.022 261.325);
+  --color-dark-500: oklch(0.551 0.027 264.364);
+  --color-dark-600: oklch(0.446 0.03 256.802);
+  --color-dark-700: oklch(0.373 0.034 259.733);
+  --color-dark-800: oklch(0.278 0.033 256.848);
+  --color-dark-900: oklch(0.21 0.034 264.665);
+  --color-dark-950: oklch(0.13 0.028 261.692);
+  
+  /* Custom fonts */
+  --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  
+  /* Custom animations */
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-slow: pulse-slow 4s ease-in-out infinite;
+  --animate-bounce-slow: bounce-slow 3s ease-in-out infinite;
+  --animate-fade-in: fadeIn 1s ease-out;
+  --animate-fade-in-right: fadeInRight 1s ease-out;
+  --animate-gradient: gradient 3s ease infinite;
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  
+  @keyframes bounce-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+}
+
+/* Base styles - only essential global styles */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Improved hover effects for better UX */
+.hover-lift {
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+/* Smooth scale animations */
+.hover-scale {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-slate-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-slate-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-slate-500;
+}
+
+/* Selection */
+::selection {
+  @apply bg-emerald-500/20 text-emerald-600;
+}
+
+/* Focus styles - more specific to avoid conflicts */
+button:focus,
+a:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Smooth transitions for theme changes - only for specific properties */
+.theme-transition,
+.theme-transition * {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

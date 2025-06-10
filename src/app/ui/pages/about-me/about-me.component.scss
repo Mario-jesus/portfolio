@@ -1,0 +1,94 @@
+// Estilos específicos del componente About Me
+
+// Animaciones personalizadas para elementos flotantes
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-20px); 
+  }
+}
+
+// Efectos de hover mejorados para las tarjetas
+.hover-lift {
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+// Estilos para la línea de tiempo
+.timeline-line {
+  background: linear-gradient(to bottom, #10b981, #3b82f6);
+}
+
+// Efectos de gradiente para botones
+.gradient-button {
+  background-size: 200% 200%;
+  transition: all 0.3s ease;
+}
+
+.gradient-button:hover {
+  background-position: right center;
+}
+
+// Animación para elementos que aparecen
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Estilos para tooltips
+.tooltip {
+  position: relative;
+}
+
+.tooltip::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+.tooltip:hover::before {
+  opacity: 1;
+}
+
+// Responsive adjustments
+@media (max-width: 640px) {
+  .timeline-line {
+    left: 1rem;
+  }
+  
+  .timeline-dot {
+    left: 0.75rem;
+  }
+} 
