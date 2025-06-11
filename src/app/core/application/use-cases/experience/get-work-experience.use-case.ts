@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Experience } from '../../../domain/entities/experience.entity';
 import { ExperienceRepository } from '../../../domain/ports/experience.repository';
@@ -7,7 +7,7 @@ import { ExperienceRepository } from '../../../domain/ports/experience.repositor
   providedIn: 'root'
 })
 export class GetWorkExperienceUseCase {
-  constructor(private experienceRepository: ExperienceRepository) {}
+  private experienceRepository = inject(ExperienceRepository);
 
   execute(): Observable<Experience[]> {
     return this.experienceRepository.getWorkExperience();
