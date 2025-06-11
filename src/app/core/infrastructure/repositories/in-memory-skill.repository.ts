@@ -12,7 +12,7 @@ export class InMemorySkillRepository extends SkillRepository {
       id: '1',
       name: 'Angular',
       category: SkillCategory.FRAMEWORK,
-      level: SkillLevel.EXPERT,
+      level: SkillLevel.ADVANCED,
       description: 'Framework para desarrollo de aplicaciones web SPA',
       iconUrl: '/assets/skills/angular.svg',
       yearsOfExperience: 4,
@@ -29,18 +29,18 @@ export class InMemorySkillRepository extends SkillRepository {
     },
     {
       id: '3',
-      name: 'Node.js',
-      category: SkillCategory.FRAMEWORK,
+      name: 'JavaScript',
+      category: SkillCategory.PROGRAMMING_LANGUAGE,
       level: SkillLevel.ADVANCED,
-      description: 'Runtime de JavaScript para desarrollo backend',
-      iconUrl: '/assets/skills/nodejs.svg',
+      description: 'Lenguaje de programación para desarrollo frontend',
+      iconUrl: '/assets/skills/javascript.svg',
       yearsOfExperience: 3
     },
     {
       id: '4',
       name: 'MongoDB',
       category: SkillCategory.DATABASE,
-      level: SkillLevel.INTERMEDIATE,
+      level: SkillLevel.BEGINNER,
       description: 'Base de datos NoSQL orientada a documentos',
       iconUrl: '/assets/skills/mongodb.svg',
       yearsOfExperience: 2
@@ -56,21 +56,118 @@ export class InMemorySkillRepository extends SkillRepository {
     },
     {
       id: '6',
-      name: 'Liderazgo',
-      category: SkillCategory.SOFT_SKILL,
-      level: SkillLevel.ADVANCED,
-      description: 'Capacidad de liderar equipos y proyectos',
+      name: 'Python',
+      category: SkillCategory.PROGRAMMING_LANGUAGE,
+      level: SkillLevel.EXPERT,
+      description: 'Lenguaje de programación para desarrollo web',
+      iconUrl: '/assets/skills/python.svg',
       yearsOfExperience: 3
     },
     {
       id: '7',
-      name: 'AWS',
-      category: SkillCategory.CLOUD,
+      name: 'SQL',
+      category: SkillCategory.DATABASE,
+      level: SkillLevel.ADVANCED,
+      description: 'Lenguaje de consulta para bases de datos relacionales',
+      iconUrl: '/assets/skills/sql.svg',
+      yearsOfExperience: 2
+    },
+    {
+      id: '8',
+      name: 'Git',
+      category: SkillCategory.TOOL,
       level: SkillLevel.INTERMEDIATE,
-      description: 'Servicios de computación en la nube de Amazon',
-      iconUrl: '/assets/skills/aws.svg',
-      yearsOfExperience: 2,
-      certifications: ['AWS Solutions Architect Associate']
+      description: 'Sistema de control de versiones',
+      iconUrl: '/assets/skills/git.svg',
+      yearsOfExperience: 2
+    },
+    {
+      id: '9',
+      name: 'CSS',
+      category: SkillCategory.PROGRAMMING_LANGUAGE,
+      level: SkillLevel.ADVANCED,
+      description: 'Lenguaje de estilos para desarrollo web',
+      iconUrl: '/assets/skills/css.svg',
+      yearsOfExperience: 3
+    },
+    {
+      id: '10',
+      name: 'HTML',
+      category: SkillCategory.PROGRAMMING_LANGUAGE,
+      level: SkillLevel.INTERMEDIATE,
+      description: 'Lenguaje de marcado para desarrollo web',
+    },
+    {
+      id: '11',
+      name: 'Tailwind CSS',
+      category: SkillCategory.PROGRAMMING_LANGUAGE,
+      level: SkillLevel.INTERMEDIATE,
+      description: 'Framework de CSS para desarrollo web',
+      iconUrl: '/assets/skills/tailwindcss.svg',
+      yearsOfExperience: 3
+    },
+    {
+      id: '12',
+      name: 'Ionic',
+      category: SkillCategory.FRAMEWORK,
+      level: SkillLevel.BEGINNER,
+      description: 'Framework para desarrollo de aplicaciones móviles',
+      iconUrl: '/assets/skills/ionic.svg',
+      yearsOfExperience: 2
+    },
+    {
+      id: '13',
+      name: 'Sass',
+      category: SkillCategory.PROGRAMMING_LANGUAGE,
+      level: SkillLevel.ADVANCED,
+      description: 'Lenguaje de preprocesamiento para CSS',
+      iconUrl: '/assets/skills/sass.svg',
+      yearsOfExperience: 3
+    },
+    {
+      id: '14',
+      name: 'Ubuntu',
+      category: SkillCategory.OPERATING_SYSTEM,
+      level: SkillLevel.ADVANCED,
+      description: 'Sistema operativo Linux',
+      iconUrl: '/assets/skills/ubuntu.svg',
+      yearsOfExperience: 2
+    },
+    {
+      id: '15',
+      name: 'Django',
+      category: SkillCategory.FRAMEWORK,
+      level: SkillLevel.ADVANCED,
+      description: 'Framework para desarrollo web',
+      iconUrl: '/assets/skills/django.svg',
+      yearsOfExperience: 2
+    },
+    {
+      id: '16',
+      name: 'Django Rest Framework',
+      category: SkillCategory.FRAMEWORK,
+      level: SkillLevel.ADVANCED,
+      description: 'Framework para desarrollo web',
+      iconUrl: '/assets/skills/django-rest-framework.svg',
+      yearsOfExperience: 2
+    },
+    {
+      id: '17',
+      name: 'Java',
+      category: SkillCategory.PROGRAMMING_LANGUAGE,
+      level: SkillLevel.INTERMEDIATE,
+      description: 'Lenguaje de programación para desarrollo web',
+      iconUrl: '/assets/skills/java.svg',
+      yearsOfExperience: 2
+    },
+    {
+      id: '18',
+      name: 'MySQL',
+      category: SkillCategory.DATABASE,
+      level: SkillLevel.ADVANCED,
+      description: 'Base de datos relacional',
+      iconUrl: '/assets/skills/mysql.svg',
+      yearsOfExperience: 2
     }
   ];
 

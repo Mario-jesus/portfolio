@@ -17,6 +17,7 @@ export enum SkillCategory {
   SOFT_SKILL = 'soft_skill',
   METHODOLOGY = 'methodology',
   CLOUD = 'cloud',
+  OPERATING_SYSTEM = 'operating_system',
   OTHER = 'other'
 }
 

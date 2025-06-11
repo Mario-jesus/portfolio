@@ -10,13 +10,33 @@
       </div>
       
       <h1 class="text-5xl font-black text-slate-800 dark:text-white mb-4">
-        Mis <span class="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Proyectos</span>
+        Proyectos <span class="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Académicos</span>
       </h1>
       
       <p class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
-        Una colección de proyectos que demuestran mis habilidades técnicas y creatividad. 
-        Desde aplicaciones web hasta APIs, cada proyecto cuenta una historia de innovación.
+        Una colección de proyectos académicos y personales que demuestran mis habilidades técnicas y aprendizaje continuo. 
+        Cada proyecto representa un paso en mi formación profesional hacia la residencia.
       </p>
+    </div>
+
+    <!-- Academic Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+      <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 text-center">
+        <div class="text-3xl font-bold text-emerald-500 mb-2">{{ getAcademicProjectsCount() }}</div>
+        <div class="text-sm text-slate-600 dark:text-slate-400">Proyectos Académicos</div>
+      </div>
+      <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 text-center">
+        <div class="text-3xl font-bold text-blue-500 mb-2">{{ getCompletedProjectsCount() }}</div>
+        <div class="text-sm text-slate-600 dark:text-slate-400">Completados</div>
+      </div>
+      <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 text-center">
+        <div class="text-3xl font-bold text-purple-500 mb-2">{{ getTotalTechnologies() }}</div>
+        <div class="text-sm text-slate-600 dark:text-slate-400">Tecnologías</div>
+      </div>
+      <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 text-center">
+        <div class="text-3xl font-bold text-orange-500 mb-2">{{ getFeaturedProjectsCount() }}</div>
+        <div class="text-sm text-slate-600 dark:text-slate-400">Destacados</div>
+      </div>
     </div>
 
     <!-- Search and Filters -->
@@ -30,7 +50,7 @@
         </div>
         <input
           type="text"
-          placeholder="Buscar proyectos..."
+          placeholder="Buscar proyectos, tecnologías, aprendizajes..."
           (input)="onSearchChange($event)"
           class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-slate-600 rounded-xl leading-5 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors duration-200"
         />
@@ -57,6 +77,24 @@
           Destacados
         </button>
         <button
+          (click)="setFilter(ProjectContext.ACADEMIC)"
+          [class]="activeFilter() === ProjectContext.ACADEMIC 
+            ? 'bg-emerald-500 text-white shadow-lg' 
+            : 'bg-gray-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700'"
+          class="px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm"
+        >
+          Académicos
+        </button>
+        <button
+          (click)="setFilter(ProjectContext.PERSONAL)"
+          [class]="activeFilter() === ProjectContext.PERSONAL 
+            ? 'bg-emerald-500 text-white shadow-lg' 
+            : 'bg-gray-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700'"
+          class="px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm"
+        >
+          Personales
+        </button>
+        <button
           (click)="setFilter(ProjectCategory.WEB_APPLICATION)"
           [class]="activeFilter() === ProjectCategory.WEB_APPLICATION 
             ? 'bg-emerald-500 text-white shadow-lg' 
@@ -73,15 +111,6 @@
           class="px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm"
         >
           Móvil
-        </button>
-        <button
-          (click)="setFilter(ProjectCategory.API)"
-          [class]="activeFilter() === ProjectCategory.API 
-            ? 'bg-emerald-500 text-white shadow-lg' 
-            : 'bg-gray-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700'"
-          class="px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm"
-        >
-          API
         </button>
         <button
           (click)="setFilter(ProjectStatus.COMPLETED)"
@@ -125,10 +154,10 @@
             </div>
           </div>
 
-          <!-- Status Badge -->
+          <!-- Context Badge -->
           <div class="absolute top-4 right-4">
-            <div [class]="getStatusColor(project.status)" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium">
-              {{ getStatusLabel(project.status) }}
+            <div [class]="getContextColor(project.context)" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium">
+              {{ getContextLabel(project.context) }}
             </div>
           </div>
         </div>
@@ -145,6 +174,9 @@
                 </svg>
                 {{ getCategoryLabel(project.category) }}
               </div>
+              <div [class]="getStatusColor(project.status)" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium">
+                {{ getStatusLabel(project.status) }}
+              </div>
             </div>
             
             <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-200">
@@ -152,8 +184,20 @@
             </h3>
             
             <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-              {{ project.shortDescription }}
+              {{ project.shortDescription || project.description }}
             </p>
+          </div>
+
+          <!-- Academic Context -->
+          <div *ngIf="project.context === ProjectContext.ACADEMIC" class="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+            <div class="flex items-center space-x-2 mb-2">
+              <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+              </svg>
+              <span class="text-sm font-medium text-blue-700 dark:text-blue-300">Proyecto Académico</span>
+            </div>
+            <p class="text-xs text-blue-600 dark:text-blue-400">{{ getProjectImpact(project) }}</p>
           </div>
 
           <!-- Project Dates -->
@@ -165,7 +209,7 @@
           </div>
 
           <!-- Technologies -->
-          <div class="mb-6">
+          <div class="mb-4">
             <div class="flex flex-wrap gap-2">
               <span 
                 *ngFor="let tech of project.technologies.slice(0, 4)" 
@@ -180,6 +224,23 @@
                 +{{ project.technologies.length - 4 }}
               </span>
             </div>
+          </div>
+
+          <!-- Learning Outcomes -->
+          <div *ngIf="hasLearningOutcomes(project)" class="mb-4">
+            <h4 class="text-sm font-semibold text-slate-800 dark:text-white mb-2">Aprendizajes:</h4>
+            <ul class="space-y-1">
+              <li 
+                *ngFor="let outcome of project.learningOutcomes?.slice(0, 2); trackBy: trackByIndex"
+                class="flex items-start space-x-2 text-xs text-slate-600 dark:text-slate-300"
+              >
+                <div class="w-1 h-1 bg-emerald-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                <span>{{ outcome }}</span>
+              </li>
+              <li *ngIf="project.learningOutcomes && project.learningOutcomes.length > 2" class="text-xs text-slate-500 dark:text-slate-400">
+                +{{ project.learningOutcomes.length - 2 }} más...
+              </li>
+            </ul>
           </div>
 
           <!-- Action Buttons -->
@@ -198,7 +259,7 @@
             <button
               *ngIf="project.repositoryUrl"
               (click)="openRepository(project.repositoryUrl)"
-              class="flex-1 inline-flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-slate-600 text-sm font-medium rounded-lg text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors duration-200"
+              class="flex-1 inline-flex items-center justify-center px-4 py-2 border border-slate-300 dark:border-slate-600 text-sm font-medium rounded-lg text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors duration-200"
             >
               <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
@@ -212,33 +273,13 @@
 
     <!-- Empty State -->
     <div *ngIf="!isLoading() && filteredProjects().length === 0" class="text-center py-20">
-      <div class="w-24 h-24 mx-auto mb-6 bg-gray-100 dark:bg-slate-800 rounded-full flex items-center justify-center">
-        <svg class="w-12 h-12 text-gray-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.29-1.009-5.824-2.562M15 6.306a7.962 7.962 0 00-6 0m6 0V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2V6"></path>
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full mb-6">
+        <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.29-1.009-5.824-2.562M15 6.306a7.962 7.962 0 00-6 0m6 0V3a1 1 0 00-1-1h-4a1 1 0 00-1 1v3.306"></path>
         </svg>
       </div>
       <h3 class="text-xl font-semibold text-slate-800 dark:text-white mb-2">No se encontraron proyectos</h3>
-      <p class="text-slate-600 dark:text-slate-400">
-        {{ searchQuery() ? 'Intenta con otros términos de búsqueda.' : 'No hay proyectos para el filtro seleccionado.' }}
-      </p>
-    </div>
-
-    <!-- Project Stats -->
-    <div *ngIf="!isLoading() && projects().length > 0" class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="text-center p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700">
-        <div class="text-3xl font-bold text-emerald-500 mb-2">{{ projects().length }}</div>
-        <div class="text-slate-600 dark:text-slate-300">Proyectos Totales</div>
-      </div>
-      
-      <div class="text-center p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700">
-        <div class="text-3xl font-bold text-blue-500 mb-2">{{ getCompletedProjectsCount() }}</div>
-        <div class="text-slate-600 dark:text-slate-300">Completados</div>
-      </div>
-      
-      <div class="text-center p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700">
-        <div class="text-3xl font-bold text-yellow-500 mb-2">{{ getFeaturedProjectsCount() }}</div>
-        <div class="text-slate-600 dark:text-slate-300">Destacados</div>
-      </div>
+      <p class="text-slate-600 dark:text-slate-300">Intenta ajustar los filtros o términos de búsqueda.</p>
     </div>
   </div>
 </div> 

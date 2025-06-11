@@ -15,9 +15,10 @@
           
           <!-- Content -->
           <div class="order-2 lg:order-1">
-            <div class="inline-flex items-center space-x-2 bg-emerald-50 dark:bg-emerald-900/20 px-4 py-2 rounded-full border border-emerald-200 dark:border-emerald-800 mb-6">
+            <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full border mb-6"
+                 [class]="getAvailabilityColor(profile()?.availability!)">
               <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-              <span class="text-emerald-700 dark:text-emerald-300 font-medium text-sm">{{ profile()?.availability === 'available' ? 'Disponible' : 'Ocupado' }}</span>
+              <span class="font-medium text-sm">{{ getAvailabilityText(profile()?.availability!) }}</span>
             </div>
             
             <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white leading-tight mb-6">
@@ -26,17 +27,25 @@
             </h1>
             
             <p class="text-lg sm:text-xl text-slate-600 dark:text-slate-300 leading-relaxed mb-8">
-              {{ profile()?.summary }}
+              {{ profile()?.summary || 'Estudiante apasionado por la tecnología, enfocado en desarrollar habilidades profesionales a través de la residencia profesional.' }}
             </p>
             
-            <!-- Quick Stats -->
-            <div class="grid grid-cols-2 gap-4 sm:gap-6 mb-8">
+            <!-- Academic Stats -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mb-8">
               <div class="text-center p-3 sm:p-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700">
-                <div class="text-xl sm:text-2xl font-bold text-emerald-500 mb-1">{{ profile()?.yearsOfExperience }}+</div>
-                <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">Años de experiencia</div>
+                <div class="text-xl sm:text-2xl font-bold text-emerald-500 mb-1">{{ profile()?.currentSemester }}°</div>
+                <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">Semestre</div>
               </div>
               <div class="text-center p-3 sm:p-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700">
-                <div class="text-xl sm:text-2xl font-bold text-blue-500 mb-1">{{ profile()?.languages?.length || 0 }}</div>
+                <div class="text-xl sm:text-2xl font-bold text-blue-500 mb-1">{{ calculateGPA() }}</div>
+                <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">Promedio</div>
+              </div>
+              <div class="text-center p-3 sm:p-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700">
+                <div class="text-xl sm:text-2xl font-bold text-purple-500 mb-1">{{ getCompletedCredits() }}%</div>
+                <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">Créditos</div>
+              </div>
+              <div class="text-center p-3 sm:p-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700">
+                <div class="text-xl sm:text-2xl font-bold text-orange-500 mb-1">{{ profile()?.languages?.length || 0 }}</div>
                 <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">Idiomas</div>
               </div>
             </div>
@@ -44,11 +53,11 @@
             <!-- CTA Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <button 
-                *ngIf="profile()?.resumeUrl"
-                (click)="downloadResume()"
-                class="group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-400 hover:to-blue-400 text-white font-semibold rounded-xl hover:shadow-2xl hover:shadow-emerald-500/25 transform hover:scale-[1.02] transition-all duration-500 ease-out bg-[length:200%_200%] hover:animate-[gradient_3s_ease_infinite] text-sm sm:text-base"
+                *ngIf="profile()?.academicCvUrl || profile()?.resumeUrl"
+                (click)="downloadAcademicCV()"
+                class="group cursor-pointer inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-400 hover:to-blue-400 text-white font-semibold rounded-xl hover:shadow-2xl hover:shadow-emerald-500/25 transform hover:scale-[1.02] transition-all duration-500 ease-out bg-[length:200%_200%] hover:animate-[gradient_3s_ease_infinite] text-sm sm:text-base"
               >
-                <span>Descargar CV</span>
+                <span>Descargar CV Académico</span>
                 <svg class="ml-2 w-4 sm:w-5 h-4 sm:h-5 group-hover:translate-y-[-2px] transition-transform duration-300 ease-out" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
@@ -81,8 +90,9 @@
                   <div class="w-full h-full bg-white dark:bg-slate-900 rounded-3xl overflow-hidden">
                     <app-progressive-image
                       [src]="profile()?.profileImageUrl || '/assets/profile/mario-jesus.jpg'"
-                      [alt]="(profile()?.firstName || 'Mario') + ' ' + (profile()?.lastName || 'Jesús')"
-                                             [placeholderSrc]="'/assets/profile/mario-jesus-low.jpg'"
+                      [alt]="(profile()?.firstName || 'Mario') + ' ' + (profile()?.lastName || 'Jesús') + ' - Foto de perfil académica'"
+                      [title]="(profile()?.firstName || 'Mario') + ' ' + (profile()?.lastName || 'Jesús')"
+                      [placeholderSrc]="'/assets/profile/mario-jesus-low.jpg'"
                       [blurAmount]="5"
                       [transitionDuration]="300"
                       class="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-800 ease-in"
@@ -96,29 +106,161 @@
       </div>
     </section>
 
-    <!-- Bio Section -->
+    <!-- Academic Information Section -->
     <section class="py-20 bg-white dark:bg-slate-900">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
           <h2 class="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white mb-6">
-            Mi 
-            <span class="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Historia</span>
+            Información 
+            <span class="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Académica</span>
           </h2>
           <div class="w-24 h-1 bg-gradient-to-r from-emerald-500 to-blue-500 mx-auto rounded-full"></div>
         </div>
         
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+          <!-- University Info -->
+          <div class="bg-slate-50 dark:bg-slate-800 p-8 rounded-2xl">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Universidad</h3>
+            <div class="space-y-3">
+              <div class="flex justify-between">
+                <span class="text-slate-600 dark:text-slate-400">Institución:</span>
+                <span class="font-medium text-slate-900 dark:text-white text-right">{{ profile()?.university }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-600 dark:text-slate-400">Carrera:</span>
+                <span class="font-medium text-slate-900 dark:text-white text-right">{{ profile()?.degree }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-600 dark:text-slate-400">Semestre:</span>
+                <span class="font-medium text-slate-900 dark:text-white text-right">{{ profile()?.currentSemester }}° de 9</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-600 dark:text-slate-400">Promedio:</span>
+                <span class="font-medium text-emerald-600 dark:text-emerald-400 text-right">{{ calculateGPA() }}/100</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Residency Preferences -->
+          <div class="bg-slate-50 dark:bg-slate-800 p-8 rounded-2xl">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Preferencias de Residencia</h3>
+            <div class="space-y-3" *ngIf="residencyInfo()">
+              <div class="flex justify-between">
+                <span class="text-slate-600 dark:text-slate-400">Duración:</span>
+                <span class="font-medium text-slate-900 dark:text-white text-right">{{ getDurationText(residencyInfo()?.duration!) }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-600 dark:text-slate-400">Modalidad:</span>
+                <span class="font-medium text-slate-900 dark:text-white text-right">{{ getLocationPreference(residencyInfo()?.requirements?.location!) || 'Híbrida' }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-600 dark:text-slate-400">Compromiso:</span>
+                <span class="font-medium text-slate-900 dark:text-white text-right">{{ getTimeCommitment(residencyInfo()?.requirements?.timeCommitment!) }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-600 dark:text-slate-400">Estado:</span>
+                <span class="font-medium text-blue-600 dark:text-blue-400 text-right">{{ getAvailabilityText(profile()?.availability!) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
         <div class="prose prose-lg prose-slate dark:prose-invert max-w-none">
           <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed text-center">
-            {{ profile()?.bio }}
+            {{ profile()?.bio || 'Estudiante comprometido con la excelencia académica, buscando aplicar mis conocimientos teóricos en un entorno profesional real a través de la residencia profesional. Mi objetivo es contribuir con proyectos innovadores mientras desarrollo habilidades prácticas que complementen mi formación universitaria.' }}
           </p>
         </div>
       </div>
     </section>
 
+    <!-- Areas of Interest Section -->
+    <section class="py-20 bg-slate-50 dark:bg-slate-800/50" *ngIf="residencyInfo()">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white mb-6">
+            Áreas de 
+            <span class="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Interés</span>
+          </h2>
+          <p class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+            Campos tecnológicos en los que me gustaría desarrollar mi residencia profesional
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <div 
+            *ngFor="let area of residencyInfo()?.areasOfInterest; trackBy: trackByIndex"
+            class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+          >
+            <div class="flex items-center space-x-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-semibold text-slate-800 dark:text-white">{{ getAreaText(area) }}</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Área de especialización</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Personal Interests -->
+        <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700">
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Intereses Personales</h3>
+          <div class="flex flex-wrap gap-3">
+            <span 
+              *ngFor="let interest of profile()?.interests" 
+              class="px-4 py-2 bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-emerald-300 dark:hover:border-emerald-600 hover:shadow-lg transition-all duration-300 cursor-default"
+            >
+              {{ interest }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Skills & Languages Section -->
-    <section class="py-20 bg-slate-50 dark:bg-slate-800/50">
+    <section class="py-20 bg-white dark:bg-slate-900">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid lg:grid-cols-2 gap-16">
+          
+          <!-- Technical Skills -->
+          <div>
+            <h3 class="text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white mb-8">
+              Habilidades Técnicas
+            </h3>
+            
+            <div class="space-y-6">
+              <div 
+                *ngFor="let skill of skills(); trackBy: trackBySkillId" 
+                class="bg-slate-50 dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700"
+              >
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex items-center space-x-3">
+                    <img 
+                      [src]="skill.iconUrl" 
+                      [alt]="skill.name + ' - Icono de habilidad técnica'"
+                      [title]="skill.name + ' - Habilidad técnica'"
+                      class="w-8 h-8 object-contain"
+                      loading="lazy"
+                    />
+                    <h4 class="font-semibold text-slate-800 dark:text-white">{{ skill.name }}</h4>
+                  </div>
+                  <span class="text-sm font-medium text-slate-600 dark:text-slate-400">
+                    {{ getSkillLevelText(skill.level) }}
+                  </span>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+                  <div 
+                    [class]="'h-2 rounded-full transition-all duration-500 ' + getSkillLevelColor(skill.level) + ' ' + getSkillLevelWidth(skill.level)"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
           
           <!-- Languages -->
           <div>
@@ -129,7 +271,7 @@
             <div class="space-y-4">
               <div 
                 *ngFor="let language of profile()?.languages; let i = index" 
-                class="flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300"
+                class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-all duration-300"
               >
                 <div class="flex items-center space-x-4">
                   <div class="w-12 h-12 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600 rounded-xl flex items-center justify-center">
@@ -147,44 +289,29 @@
               </div>
             </div>
           </div>
-          
-          <!-- Interests -->
-          <div>
-            <h3 class="text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white mb-8">
-              Intereses
-            </h3>
-            
-            <div class="flex flex-wrap gap-3">
-              <span 
-                *ngFor="let interest of profile()?.interests" 
-                class="px-4 py-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-emerald-300 dark:hover:border-emerald-600 hover:shadow-lg transition-all duration-300 cursor-default"
-              >
-                {{ interest }}
-              </span>
-            </div>
-          </div>
         </div>
       </div>
     </section>
 
-    <!-- Experience Timeline -->
-    <section class="py-20 bg-white dark:bg-slate-900">
+    <!-- Academic Timeline -->
+    <section class="py-20 bg-slate-50 dark:bg-slate-800/50">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
           <h2 class="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white mb-6">
-            Mi 
-            <span class="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Trayectoria</span>
+            Trayectoria 
+            <span class="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Académica</span>
           </h2>
           <div class="w-24 h-1 bg-gradient-to-r from-emerald-500 to-blue-500 mx-auto rounded-full"></div>
         </div>
 
-        <!-- Work Experience -->
+        <!-- Academic Experience -->
         <div class="mb-16">
           <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-8 flex items-center">
             <svg class="w-6 h-6 mr-3 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2h8zM16 10h.01M16 14h.01M12 14h.01M8 14h.01M8 10h.01" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
             </svg>
-            Experiencia Laboral
+            Formación Académica
           </h3>
           
           <div class="relative">
@@ -193,31 +320,44 @@
             
             <div class="space-y-8">
               <div 
-                *ngFor="let experience of getWorkExperiences(); trackBy: trackByExperienceId" 
+                *ngFor="let experience of getAcademicExperiences(); trackBy: trackByExperienceId" 
                 class="relative flex items-start space-x-6"
               >
                 <!-- Timeline Dot -->
-                <div class="relative z-10 w-4 h-4 bg-emerald-500 rounded-full border-4 border-white dark:border-slate-900 shadow-lg"></div>
+                <div class="relative z-10 w-4 h-4 bg-emerald-500 rounded-full border-4 border-white dark:border-slate-800 shadow-lg"></div>
                 
                 <!-- Content -->
-                <div class="flex-1 bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
+                <div class="flex-1 bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700">
                   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
-                    <h4 class="text-lg font-bold text-slate-800 dark:text-white">{{ experience.title }}</h4>
-                    <span class="text-sm text-slate-500 dark:text-slate-400 mt-1 sm:mt-0">
+                    <div>
+                      <h4 class="text-lg font-bold text-slate-800 dark:text-white">{{ experience.title }}</h4>
+                      <p class="text-emerald-600 dark:text-emerald-400 font-medium">{{ experience.company }}</p>
+                      <p class="text-sm text-slate-500 dark:text-slate-400">{{ experience.location }}</p>
+                    </div>
+                    <div class="text-sm text-slate-500 dark:text-slate-400 mt-2 sm:mt-0">
                       {{ experience.startDate | date:'MMM yyyy' }} - 
                       {{ experience.endDate ? (experience.endDate | date:'MMM yyyy') : 'Presente' }}
-                    </span>
-                  </div>
-                  
-                  <div class="flex items-center space-x-2 mb-3">
-                    <h5 class="font-semibold text-emerald-600 dark:text-emerald-400">{{ experience.company }}</h5>
-                    <span class="text-slate-400">•</span>
-                    <span class="text-sm text-slate-500 dark:text-slate-400">{{ experience.location }}</span>
+                    </div>
                   </div>
                   
                   <p class="text-slate-600 dark:text-slate-300 mb-4">{{ experience.description }}</p>
                   
-                  <div class="flex flex-wrap gap-2">
+                  <!-- Achievements -->
+                  <div *ngIf="experience.achievements?.length" class="mb-4">
+                    <h5 class="font-semibold text-slate-800 dark:text-white mb-2">Logros:</h5>
+                    <ul class="space-y-1">
+                      <li 
+                        *ngFor="let achievement of experience.achievements" 
+                        class="flex items-start space-x-2 text-sm text-slate-600 dark:text-slate-300"
+                      >
+                        <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>{{ achievement }}</span>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <!-- Technologies -->
+                  <div *ngIf="experience.technologies?.length" class="flex flex-wrap gap-2">
                     <span 
                       *ngFor="let tech of experience.technologies" 
                       class="px-2 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs rounded-lg font-medium"
@@ -231,101 +371,34 @@
           </div>
         </div>
 
-        <!-- Education -->
-        <div *ngIf="getEducationExperiences().length > 0">
+        <!-- Certifications -->
+        <div *ngIf="getCertificationExperiences().length > 0">
           <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-8 flex items-center">
             <svg class="w-6 h-6 mr-3 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
             </svg>
-            Educación
+            Certificaciones
           </h3>
           
-          <div class="relative">
-            <!-- Timeline Line -->
-            <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-500 to-purple-500"></div>
-            
-            <div class="space-y-8">
-              <div 
-                *ngFor="let experience of getEducationExperiences(); trackBy: trackByExperienceId" 
-                class="relative flex items-start space-x-6"
-              >
-                <!-- Timeline Dot -->
-                <div class="relative z-10 w-4 h-4 bg-blue-500 rounded-full border-4 border-white dark:border-slate-900 shadow-lg"></div>
-                
-                <!-- Content -->
-                <div class="flex-1 bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-300">
-                  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
-                    <h4 class="text-lg font-bold text-slate-800 dark:text-white">{{ experience.title }}</h4>
-                    <span class="text-sm text-slate-500 dark:text-slate-400 mt-1 sm:mt-0">
-                      {{ experience.startDate | date:'MMM yyyy' }} - 
-                      {{ experience.endDate ? (experience.endDate | date:'MMM yyyy') : 'Presente' }}
-                    </span>
-                  </div>
-                  
-                  <div class="flex items-center space-x-2 mb-3">
-                    <h5 class="font-semibold text-blue-600 dark:text-blue-400">{{ experience.company }}</h5>
-                    <span class="text-slate-400">•</span>
-                    <span class="text-sm text-slate-500 dark:text-slate-400">{{ experience.location }}</span>
-                  </div>
-                  
-                  <p class="text-slate-600 dark:text-slate-300">{{ experience.description }}</p>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div 
+              *ngFor="let certification of getCertificationExperiences(); trackBy: trackByExperienceId"
+              class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700"
+            >
+              <div class="flex items-start space-x-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <h4 class="font-bold text-slate-800 dark:text-white">{{ certification.title }}</h4>
+                  <p class="text-blue-600 dark:text-blue-400 font-medium">{{ certification.company }}</p>
+                  <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                    {{ certification.startDate | date:'MMM yyyy' }}
+                  </p>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section class="py-20 bg-slate-50 dark:bg-slate-800/50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white mb-6">
-            Habilidades 
-            <span class="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Técnicas</span>
-          </h2>
-          <div class="w-24 h-1 bg-gradient-to-r from-emerald-500 to-blue-500 mx-auto rounded-full"></div>
-        </div>
-
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
-          <div 
-            *ngFor="let skill of skills(); trackBy: trackBySkillId" 
-            class="group relative bg-white dark:bg-slate-800 p-4 sm:p-6 rounded-2xl shadow-lg hover:shadow-2xl border border-slate-200 dark:border-slate-700 hover:border-emerald-300 dark:hover:border-emerald-600 transition-all duration-500 ease-out hover:scale-[1.02]"
-          >
-            <!-- Skill Level Indicator -->
-            <div class="absolute top-3 right-3">
-              <div 
-                [class]="'w-3 h-3 rounded-full ' + getSkillLevelColor(skill.level)"
-                [title]="getSkillLevelText(skill.level)"
-              ></div>
-            </div>
-            
-            <div class="flex flex-col items-center text-center space-y-4">
-              <div class="w-16 h-16 flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-600 rounded-xl group-hover:scale-[1.05] transition-transform duration-400 ease-out">
-                <img 
-                  [src]="skill.iconUrl" 
-                  [alt]="skill.name"
-                  class="w-10 h-10 object-contain"
-                  loading="lazy"
-                />
-              </div>
-              
-              <div>
-                <h3 class="font-semibold text-slate-800 dark:text-white text-sm group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors duration-400 ease-out">
-                  {{ skill.name }}
-                </h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  {{ getSkillLevelText(skill.level) }}
-                </p>
-              </div>
-            </div>
-
-            <!-- Tooltip -->
-            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-400 ease-out pointer-events-none whitespace-nowrap z-10">
-              {{ skill.description || skill.name }}
-              <div class="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-slate-700"></div>
             </div>
           </div>
         </div>

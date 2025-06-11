@@ -1,28 +1,60 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { 
+  faEnvelope, faPhone, faMapMarkerAlt, faClock, faGraduationCap,
+  faUniversity, faUser, faCalendarAlt, faAward, faInfoCircle
+} from '@fortawesome/free-solid-svg-icons';
+import { 
+  faLinkedin, faGithub, faTwitter, faInstagram, faFacebook, faYoutube 
+} from '@fortawesome/free-brands-svg-icons';
 import { SendContactMessageUseCase, SendContactMessageRequest } from '../../../core/application/use-cases/contact/send-contact-message.use-case';
 import { GetProfileUseCase } from '../../../core/application/use-cases/profile/get-profile.use-case';
+import { GetResidencyInfoUseCase } from '../../../core/application/use-cases/residency/get-residency-info.use-case';
 import { Profile } from '../../../core/domain/entities/profile.entity';
-import { SocialPlatform } from '../../../core/domain/entities/contact.entity';
+import { ProfessionalResidency } from '../../../core/domain/entities/residency.entity';
+import { SocialPlatform, MessageType } from '../../../core/domain/entities/contact.entity';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FaIconComponent],
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent implements OnInit {
   private sendContactMessageUseCase = inject(SendContactMessageUseCase);
   private getProfileUseCase = inject(GetProfileUseCase);
+  private getResidencyInfoUseCase = inject(GetResidencyInfoUseCase);
   private fb = inject(FormBuilder);
 
+  // FontAwesome icons
+  faEnvelope = faEnvelope;
+  faPhone = faPhone;
+  faMapMarkerAlt = faMapMarkerAlt;
+  faClock = faClock;
+  faGraduationCap = faGraduationCap;
+  faUniversity = faUniversity;
+  faUser = faUser;
+  faCalendarAlt = faCalendarAlt;
+  faAward = faAward;
+  faInfoCircle = faInfoCircle;
+  faLinkedin = faLinkedin;
+  faGithub = faGithub;
+  faTwitter = faTwitter;
+  faInstagram = faInstagram;
+  faFacebook = faFacebook;
+  faYoutube = faYoutube;
+
   profile = signal<Profile | null>(null);
+  residencyInfo = signal<ProfessionalResidency | null>(null);
   contactForm: FormGroup;
   isSubmitting = signal(false);
   isSubmitted = signal(false);
   submitError = signal<string | null>(null);
+
+  readonly MessageType = MessageType;
 
   constructor() {
     this.contactForm = this.fb.group({
@@ -30,22 +62,35 @@ export class ContactComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       phoneNumber: [''],
       company: [''],
+      position: [''],
+      messageType: [MessageType.RESIDENCY_PROPOSAL, [Validators.required]],
       subject: ['', [Validators.required, Validators.minLength(5)]],
       message: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
 
   ngOnInit(): void {
-    this.loadProfile();
+    this.loadData();
   }
 
-  private loadProfile(): void {
+  loadData(): void {
+    // Cargar perfil académico
     this.getProfileUseCase.execute().subscribe({
       next: (profile) => {
         this.profile.set(profile);
       },
       error: (err) => {
         console.error('Error loading profile:', err);
+      }
+    });
+
+    // Cargar información de residencia
+    this.getResidencyInfoUseCase.execute().subscribe({
+      next: (residency) => {
+        this.residencyInfo.set(residency);
+      },
+      error: (err) => {
+        console.error('Error loading residency info:', err);
       }
     });
   }
@@ -61,6 +106,7 @@ export class ContactComponent implements OnInit {
         email: formValue.email,
         subject: formValue.subject,
         message: formValue.message,
+        messageType: formValue.messageType,
         phoneNumber: formValue.phoneNumber || undefined,
         company: formValue.company || undefined
       };
@@ -73,8 +119,10 @@ export class ContactComponent implements OnInit {
           
           this.isSubmitted.set(true);
           this.contactForm.reset();
+          // Resetear el tipo de mensaje por defecto
+          this.contactForm.patchValue({ messageType: MessageType.RESIDENCY_PROPOSAL });
           console.log('Mensaje enviado:', request);
-        } catch (error) {
+        } catch {
           this.submitError.set('Error al enviar el mensaje. Por favor, intenta nuevamente.');
         } finally {
           this.isSubmitting.set(false);
@@ -115,6 +163,8 @@ export class ContactComponent implements OnInit {
       email: 'Email',
       phoneNumber: 'Teléfono',
       company: 'Empresa',
+      position: 'Cargo',
+      messageType: 'Tipo de consulta',
       subject: 'Asunto',
       message: 'Mensaje'
     };
@@ -126,16 +176,35 @@ export class ContactComponent implements OnInit {
     return !!(field?.errors && field.touched);
   }
 
-  getSocialIcon(platform: SocialPlatform): string {
-    const icons = {
-      [SocialPlatform.LINKEDIN]: 'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z',
-      [SocialPlatform.GITHUB]: 'M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z',
-      [SocialPlatform.TWITTER]: 'M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z',
-      [SocialPlatform.INSTAGRAM]: 'M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z',
-      [SocialPlatform.FACEBOOK]: 'M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z',
-      [SocialPlatform.YOUTUBE]: 'M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z',
-      [SocialPlatform.PORTFOLIO]: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z',
-      [SocialPlatform.OTHER]: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'
+  getMessageTypeLabel(type: MessageType): string {
+    switch (type) {
+      case MessageType.RESIDENCY_PROPOSAL:
+        return 'Propuesta de Residencia Profesional';
+      case MessageType.PROJECT_COLLABORATION:
+        return 'Colaboración en Proyecto';
+      case MessageType.ACADEMIC_INQUIRY:
+        return 'Consulta Académica';
+      case MessageType.GENERAL_INQUIRY:
+        return 'Consulta General';
+      case MessageType.NETWORKING:
+        return 'Networking Profesional';
+      default:
+        return 'Otro';
+    }
+  }
+
+  getSocialIcon(platform: SocialPlatform): any {
+    const icons: Record<SocialPlatform, any> = {
+      [SocialPlatform.LINKEDIN]: this.faLinkedin,
+      [SocialPlatform.GITHUB]: this.faGithub,
+      [SocialPlatform.TWITTER]: this.faTwitter,
+      [SocialPlatform.INSTAGRAM]: this.faInstagram,
+      [SocialPlatform.FACEBOOK]: this.faFacebook,
+      [SocialPlatform.YOUTUBE]: this.faYoutube,
+      [SocialPlatform.PORTFOLIO]: this.faGithub,
+      [SocialPlatform.UNIVERSITY_EMAIL]: this.faEnvelope,
+      [SocialPlatform.ACADEMIC_PROFILE]: this.faGraduationCap,
+      [SocialPlatform.OTHER]: this.faInfoCircle
     };
     return icons[platform] || icons[SocialPlatform.OTHER];
   }
@@ -144,9 +213,104 @@ export class ContactComponent implements OnInit {
     this.isSubmitted.set(false);
     this.submitError.set(null);
     this.contactForm.reset();
+    this.contactForm.patchValue({ messageType: MessageType.RESIDENCY_PROPOSAL });
   }
 
   openSocialLink(url: string): void {
     window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  // Métodos específicos para residencia profesional
+  getCurrentSemester(): string {
+    return '9°';
+  }
+
+  getUniversityName(): string {
+    return 'Instituto Tecnológico Superior de los Ríos';
+  }
+
+  getCareerName(): string {
+    return 'Ingeniería en Sistemas Computacionales';
+  }
+
+  getAcademicEmail(): string {
+    const profile = this.profile();
+    return profile?.contactInfo?.email || 'mario.arias@estudiante.tecnm.mx';
+  }
+
+  getPersonalEmail(): string {
+    const profile = this.profile();
+    return profile?.contactInfo?.email || 'mario.arias.dev@gmail.com';
+  }
+
+  getPhoneNumber(): string {
+    const profile = this.profile();
+    return profile?.contactInfo?.phone || '+52 55 1234 5678';
+  }
+
+  getLocation(): string {
+    const profile = this.profile();
+    return profile?.location || 'Balancán, Tabasco, México';
+  }
+
+  getAvailabilityStatus(): string {
+    return 'Disponible para residencia profesional';
+  }
+
+  getPreferredContactMethod(): string {
+    const profile = this.profile();
+    return profile?.contactInfo?.preferredContactMethod || 'Email académico';
+  }
+
+  getResponseTime(): string {
+    const profile = this.profile();
+    return profile?.contactInfo?.responseTime || '24-48 horas';
+  }
+
+  isAvailableForResidency(): boolean {
+    return true; // Estudiante de 9° semestre listo para residencia
+  }
+
+  getResidencyAreas(): string[] {
+    const residency = this.residencyInfo();
+    return residency?.areasOfInterest?.map(area => this.getAreaLabel(area)) || [
+      'Desarrollo Web',
+      'Desarrollo Móvil',
+      'Desarrollo de Software',
+    ];
+  }
+
+  private getAreaLabel(area: string): string {
+    const labels: Record<string, string> = {
+      'software_development': 'Desarrollo de Software',
+      'frontend_development': 'Desarrollo Frontend',
+      'backend_development': 'Desarrollo Backend',
+      'web_development': 'Desarrollo Web',
+      'mobile_development': 'Desarrollo Móvil',
+      'data_science': 'Ciencia de Datos',
+      'artificial_intelligence': 'Inteligencia Artificial',
+      'cybersecurity': 'Ciberseguridad',
+      'devops': 'DevOps',
+      'ui_ux_design': 'Diseño UI/UX',
+      'project_management': 'Gestión de Proyectos',
+      'quality_assurance': 'Aseguramiento de Calidad'
+    };
+    return labels[area] || area;
+  }
+
+  getExpectedGraduationDate(): string {
+    return 'Julio 2026';
+  }
+
+  getResidencyDuration(): string {
+    return '4-6 meses';
+  }
+
+  getAcademicAchievements(): string[] {
+    return [
+      'Promedio general: 90.92/100',
+      '94% de créditos completados',
+      'Participación en proyectos académicos'
+    ];
   }
 } 

@@ -10,7 +10,7 @@ export class InMemoryExperienceRepository extends ExperienceRepository {
   private experiences: Experience[] = [
     {
       id: '1',
-      title: 'Senior Full Stack Developer',
+      title: 'Junior Full Stack Developer',
       company: 'TechCorp Solutions',
       location: 'Ciudad de México, México',
       description: 'Desarrollo de aplicaciones web escalables utilizando tecnologías modernas. Liderazgo de equipo de 5 desarrolladores.',
@@ -57,9 +57,9 @@ export class InMemoryExperienceRepository extends ExperienceRepository {
     {
       id: '3',
       title: 'Ingeniería en Sistemas Computacionales',
-      company: 'Universidad Tecnológica de México',
-      location: 'Ciudad de México, México',
-      description: 'Licenciatura en Ingeniería en Sistemas Computacionales con especialización en desarrollo de software.',
+      company: 'Instituto Tecnológico Superior de los Ríos',
+      location: 'Balancán, Tabasco, México',
+      description: 'Licenciatura en Ingeniería en Sistemas Computacionales.',
       responsibilities: [
         'Desarrollo de proyectos académicos',
         'Investigación en inteligencia artificial',
@@ -71,8 +71,7 @@ export class InMemoryExperienceRepository extends ExperienceRepository {
         'Tesis sobre machine learning aplicado a e-commerce'
       ],
       technologies: ['Java', 'C++', 'Python', 'SQL', 'Machine Learning'],
-      startDate: new Date('2016-08-01'),
-      endDate: new Date('2020-05-30'),
+      startDate: new Date('2021-08-01'),
       type: ExperienceType.EDUCATION,
       companyLogo: '/assets/universities/utm.png'
     }

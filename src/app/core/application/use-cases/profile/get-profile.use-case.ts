@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Profile } from '../../../domain/entities/profile.entity';
 import { ProfileRepository } from '../../../domain/ports/profile.repository';
@@ -7,7 +7,7 @@ import { ProfileRepository } from '../../../domain/ports/profile.repository';
   providedIn: 'root'
 })
 export class GetProfileUseCase {
-  constructor(private profileRepository: ProfileRepository) {}
+  private profileRepository = inject(ProfileRepository);
 
   execute(): Observable<Profile> {
     return this.profileRepository.getProfile();

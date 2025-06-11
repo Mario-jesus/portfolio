@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
-import { ContactMessage, ContactStatus, ContactInfo, SocialPlatform } from '../../domain/entities/contact.entity';
+import { ContactMessage, ContactStatus, ContactInfo, SocialPlatform, ContactMethod } from '../../domain/entities/contact.entity';
 import { ContactRepository } from '../../domain/ports/contact.repository';
 
 @Injectable({
@@ -10,25 +10,27 @@ export class InMemoryContactRepository extends ContactRepository {
   private messages: ContactMessage[] = [];
   
   private contactInfo: ContactInfo = {
-    email: 'contacto@miportafolio.com',
-    phone: '+52 55 1234 5678',
-    location: 'Ciudad de México, México',
-    availability: 'Disponible para proyectos freelance y oportunidades laborales',
+    email: 'mariojesusariashernandez@gmail.com',
+    phone: '+52 916 126 8346',
+    location: 'Balancán, Tabasco, México',
+    availability: 'Disponible para residencia profesional',
+    preferredContactMethod: ContactMethod.PHONE,
+    responseTime: '24-48 horas',
     socialLinks: [
       {
         platform: SocialPlatform.LINKEDIN,
-        url: 'https://linkedin.com/in/mi-perfil',
-        username: 'mi-perfil'
+        url: 'https://www.linkedin.com/in/mario-jes%C3%BAs-arias-hern%C3%A1ndez-b086b2319/',
+        username: 'Mario Jesús'
       },
       {
         platform: SocialPlatform.GITHUB,
-        url: 'https://github.com/mi-usuario',
-        username: 'mi-usuario'
+        url: 'https://github.com/Mario-jesus',
+        username: 'Mario-jesus'
       },
       {
-        platform: SocialPlatform.TWITTER,
-        url: 'https://twitter.com/mi-usuario',
-        username: '@mi-usuario'
+        platform: SocialPlatform.UNIVERSITY_EMAIL,
+        url: 'mailto:mariojesusariashernandez@gmail.com',
+        username: 'mariojesusariashernandez@gmail.com'
       }
     ]
   };

@@ -1,4 +1,4 @@
-import { Component, Input, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, input, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,12 +9,12 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./progressive-image.scss']
 })
 export class ProgressiveImageComponent implements OnInit, OnDestroy {
-  @Input() src: string = '';
-  @Input() alt: string = '';
-  @Input() class: string = '';
-  @Input() placeholderSrc: string = '';
-  @Input() blurAmount: number = 10;
-  @Input() transitionDuration: number = 800;
+  src = input<string>('');
+  alt = input<string>('');
+  class = input<string>('');
+  placeholderSrc = input<string>('');
+  blurAmount = input<number>(10);
+  transitionDuration = input<number>(800);
 
   isLoaded = signal(false);
   isError = signal(false);
@@ -22,7 +22,7 @@ export class ProgressiveImageComponent implements OnInit, OnDestroy {
   showSpinner = signal(false);
 
   private imageElement: HTMLImageElement | null = null;
-  private spinnerTimeout: any = null;
+  private spinnerTimeout: ReturnType<typeof setTimeout> | null = null;
 
   ngOnInit(): void {
     this.loadImage();
@@ -41,13 +41,13 @@ export class ProgressiveImageComponent implements OnInit, OnDestroy {
   }
 
   private loadImage(): void {
-    if (!this.src) {
+    if (!this.src()) {
       this.isError.set(true);
       return;
     }
 
     // Mostrar placeholder o imagen borrosa inicialmente
-    this.currentSrc.set(this.placeholderSrc || this.src);
+    this.currentSrc.set(this.placeholderSrc() || this.src());
     this.isLoaded.set(false);
     this.isError.set(false);
     this.showSpinner.set(false);
@@ -71,7 +71,7 @@ export class ProgressiveImageComponent implements OnInit, OnDestroy {
       
       // Delay mínimo para transición suave pero rápida
       setTimeout(() => {
-        this.currentSrc.set(this.src);
+        this.currentSrc.set(this.src());
         this.isLoaded.set(true);
         this.showSpinner.set(false);
       }, 100);
@@ -91,7 +91,7 @@ export class ProgressiveImageComponent implements OnInit, OnDestroy {
     };
 
     // Iniciar la carga
-    this.imageElement.src = this.src;
+    this.imageElement.src = this.src();
   }
 
   onImageError(): void {
@@ -100,17 +100,17 @@ export class ProgressiveImageComponent implements OnInit, OnDestroy {
   }
 
   getImageClasses(): string {
-    const baseClasses = this.class;
+    const baseClasses = this.class();
     const loadingClasses = this.isLoaded() ? 'loaded' : 'loading';
     const errorClasses = this.isError() ? 'error' : '';
     
     return `progressive-image ${baseClasses} ${loadingClasses} ${errorClasses}`.trim();
   }
 
-  getImageStyles(): { [key: string]: string } {
+  getImageStyles(): Record<string, string> {
     return {
-      'filter': this.isLoaded() ? 'blur(0px)' : `blur(${this.blurAmount}px)`,
-      'transition': `filter ${this.transitionDuration}ms ease-out, transform ${this.transitionDuration}ms ease-out, opacity ${this.transitionDuration}ms ease-out`,
+      'filter': this.isLoaded() ? 'blur(0px)' : `blur(${this.blurAmount()}px)`,
+      'transition': `filter ${this.transitionDuration()}ms ease-out, transform ${this.transitionDuration()}ms ease-out, opacity ${this.transitionDuration()}ms ease-out`,
       'transform': this.isLoaded() ? 'scale(1)' : 'scale(1.02)',
       'opacity': this.isLoaded() ? '1' : '0.8'
     };

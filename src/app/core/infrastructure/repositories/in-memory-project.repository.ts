@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
-import { Project, ProjectCategory, ProjectStatus } from '../../domain/entities/project.entity';
+import { Project, ProjectCategory, ProjectStatus, ProjectContext } from '../../domain/entities/project.entity';
 import { ProjectRepository } from '../../domain/ports/project.repository';
 
 @Injectable({
@@ -10,46 +10,61 @@ export class InMemoryProjectRepository extends ProjectRepository {
   private projects: Project[] = [
     {
       id: '1',
-      title: 'E-Commerce Platform',
-      description: 'Una plataforma completa de comercio electrónico desarrollada con Angular y Node.js. Incluye gestión de productos, carrito de compras, procesamiento de pagos y panel de administración.',
-      shortDescription: 'Plataforma de e-commerce completa con Angular y Node.js',
-      technologies: ['Angular', 'Node.js', 'MongoDB', 'Express', 'Stripe', 'TailwindCSS'],
+      title: 'Sistema de Gestión Escolar',
+      description: 'Plataforma web para gestión académica desarrollada como proyecto final de carrera. Incluye módulos para estudiantes, profesores, calificaciones y reportes académicos.',
+      shortDescription: 'Sistema web de gestión académica con Angular y Spring Boot',
+      technologies: ['Angular', 'Spring Boot', 'MySQL', 'Bootstrap', 'JWT'],
       imageUrl: '/assets/projects/project-1.svg',
-      demoUrl: 'https://demo-ecommerce.example.com',
-      repositoryUrl: 'https://github.com/usuario/ecommerce-platform',
-      startDate: new Date('2023-01-15'),
-      endDate: new Date('2023-06-30'),
+      demoUrl: 'https://demo-gestion-escolar.example.com',
+      repositoryUrl: 'https://github.com/mario-arias/gestion-escolar',
+      startDate: new Date('2024-01-15'),
+      endDate: new Date('2024-05-30'),
       status: ProjectStatus.COMPLETED,
       category: ProjectCategory.WEB_APPLICATION,
-      featured: true
+      featured: true,
+      context: ProjectContext.ACADEMIC,
+      skillsApplied: ['Desarrollo Frontend', 'Desarrollo Backend', 'Base de Datos', 'Autenticación JWT'],
+      learningOutcomes: ['Arquitectura de aplicaciones web', 'Integración Frontend-Backend', 'Gestión de estados'],
+      challenges: ['Implementación de roles y permisos', 'Optimización de consultas SQL', 'Responsive design'],
+      impact: 'Proyecto utilizado como referencia para otros estudiantes de la carrera'
     },
     {
       id: '2',
-      title: 'Task Management API',
-      description: 'API RESTful para gestión de tareas y proyectos con autenticación JWT, roles de usuario y notificaciones en tiempo real.',
-      shortDescription: 'API REST para gestión de tareas con autenticación JWT',
-      technologies: ['Node.js', 'Express', 'PostgreSQL', 'JWT', 'Socket.io', 'Docker'],
+      title: 'API de Inventario Universitario',
+      description: 'API RESTful desarrollada para el control de inventario de laboratorios universitarios. Incluye autenticación, roles y reportes.',
+      shortDescription: 'API REST para control de inventario con Node.js',
+      technologies: ['Node.js', 'Express', 'PostgreSQL', 'JWT', 'Swagger'],
       imageUrl: '/assets/projects/project-2.svg',
-      repositoryUrl: 'https://github.com/usuario/task-management-api',
-      startDate: new Date('2023-07-01'),
-      endDate: new Date('2023-09-15'),
+      repositoryUrl: 'https://github.com/mario-arias/inventario-api',
+      startDate: new Date('2024-02-01'),
+      endDate: new Date('2024-04-15'),
       status: ProjectStatus.COMPLETED,
       category: ProjectCategory.API,
-      featured: true
+      featured: true,
+      context: ProjectContext.ACADEMIC,
+      skillsApplied: ['Node.js', 'Express', 'PostgreSQL', 'Autenticación JWT', 'Documentación API'],
+      learningOutcomes: ['Diseño de APIs RESTful', 'Seguridad en aplicaciones web', 'Documentación técnica'],
+      challenges: ['Optimización de consultas complejas', 'Implementación de middleware de seguridad'],
+      impact: 'Sistema implementado en 3 laboratorios de la universidad'
     },
     {
       id: '3',
-      title: 'Mobile Weather App',
-      description: 'Aplicación móvil para consultar el clima con geolocalización, pronósticos extendidos y notificaciones push.',
-      shortDescription: 'App móvil del clima con geolocalización',
-      technologies: ['React Native', 'TypeScript', 'Redux', 'OpenWeather API'],
+      title: 'App Móvil de Transporte Estudiantil',
+      description: 'Aplicación móvil para tracking de transporte universitario con geolocalización en tiempo real y notificaciones.',
+      shortDescription: 'App móvil para transporte estudiantil con React Native',
+      technologies: ['React Native', 'TypeScript', 'Firebase', 'Google Maps API'],
       imageUrl: '/assets/projects/project-3.svg',
-      demoUrl: 'https://play.google.com/store/apps/weather-app',
-      repositoryUrl: 'https://github.com/usuario/weather-app',
-      startDate: new Date('2023-10-01'),
+      demoUrl: 'https://github.com/mario-arias/transport-app/releases',
+      repositoryUrl: 'https://github.com/mario-arias/transport-app',
+      startDate: new Date('2024-08-01'),
       status: ProjectStatus.IN_PROGRESS,
       category: ProjectCategory.MOBILE_APPLICATION,
-      featured: false
+      featured: false,
+      context: ProjectContext.PERSONAL,
+      skillsApplied: ['React Native', 'TypeScript', 'Firebase', 'Geolocalización', 'Push Notifications'],
+      learningOutcomes: ['Desarrollo móvil multiplataforma', 'Integración con servicios de mapas', 'Tiempo real'],
+      challenges: ['Optimización de batería', 'Precisión de geolocalización', 'Sincronización en tiempo real'],
+      impact: 'Proyecto en desarrollo para beneficiar a estudiantes del campus'
     }
   ];
 

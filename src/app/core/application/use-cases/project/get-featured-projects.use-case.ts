@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Project } from '../../../domain/entities/project.entity';
 import { ProjectRepository } from '../../../domain/ports/project.repository';
@@ -7,7 +7,7 @@ import { ProjectRepository } from '../../../domain/ports/project.repository';
   providedIn: 'root'
 })
 export class GetFeaturedProjectsUseCase {
-  constructor(private projectRepository: ProjectRepository) {}
+  private projectRepository = inject(ProjectRepository);
 
   execute(): Observable<Project[]> {
     return this.projectRepository.getFeatured();

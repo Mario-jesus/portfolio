@@ -14,4 +14,9 @@ export * from './use-cases/skill/get-all-skills.use-case';
 export * from './use-cases/contact/send-contact-message.use-case';
 
 // Profile Use Cases
-export * from './use-cases/profile/get-profile.use-case'; 
+export * from './use-cases/profile/get-profile.use-case';
+
+// Residency Use Cases
+export * from './use-cases/residency/get-residency-info.use-case';
+export * from './use-cases/residency/get-residency-proposals.use-case';
+export * from './use-cases/residency/create-residency-proposal.use-case'; 

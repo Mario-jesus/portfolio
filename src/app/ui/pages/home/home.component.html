@@ -24,12 +24,13 @@
         <!-- Content -->
         <div class="animate-fade-in order-2 lg:order-1">
           <!-- Status Badge -->
-          <div class="inline-flex items-center space-x-2 sm:space-x-3 bg-emerald-50 dark:bg-emerald-900/20 px-3 sm:px-4 py-2 rounded-full border border-emerald-200 dark:border-emerald-800 mb-6">
+          <div class="inline-flex items-center space-x-2 sm:space-x-3 px-3 sm:px-4 py-2 rounded-full border mb-6"
+               [class]="getAvailabilityColor(profile()?.availability!)">
             <div class="relative">
               <div class="w-2 sm:w-3 h-2 sm:h-3 bg-emerald-500 rounded-full"></div>
               <div class="absolute inset-0 w-2 sm:w-3 h-2 sm:h-3 bg-emerald-500 rounded-full animate-ping"></div>
             </div>
-            <span class="text-emerald-700 dark:text-emerald-300 font-medium text-xs sm:text-sm">Disponible para proyectos</span>
+            <span class="font-medium text-xs sm:text-sm">{{ getAvailabilityText(profile()?.availability!) }}</span>
           </div>
           
           <!-- Main Heading -->
@@ -43,50 +44,47 @@
             </h1>
             
             <h2 class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-slate-600 dark:text-slate-300">
-              {{ profile()?.title || 'Senior Full Stack Developer' }}
+              {{ profile()?.title || 'Estudiante de Ingeniería en Sistemas' }}
             </h2>
             
             <p class="text-base sm:text-lg lg:text-xl text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed">
-              {{ profile()?.bio || 'Desarrollador apasionado por crear soluciones tecnológicas innovadoras con más de 4 años de experiencia en desarrollo web moderno.' }}
+              {{ profile()?.bio || 'Estudiante apasionado por la tecnología, buscando oportunidades de residencia profesional para aplicar mis conocimientos y seguir aprendiendo.' }}
             </p>
           </div>
 
-          <!-- Stats -->
+          <!-- Academic Stats -->
           <div class="grid grid-cols-3 gap-3 sm:gap-6 py-6">
             <div class="text-center">
-              <div class="text-2xl sm:text-3xl font-bold text-emerald-500">{{ profile()?.yearsOfExperience || 4 }}+</div>
-              <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">Años de experiencia</div>
+              <div class="text-2xl sm:text-3xl font-bold text-emerald-500">{{ profile()?.currentSemester || 9 }}°</div>
+              <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">Semestre</div>
             </div>
             <div class="text-center">
-              <div class="text-2xl sm:text-3xl font-bold text-blue-500">{{ featuredProjects().length || 15 }}+</div>
-              <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">Proyectos completados</div>
+              <div class="text-2xl sm:text-3xl font-bold text-blue-500">{{ featuredProjects().length || 3 }}+</div>
+              <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">Proyectos</div>
             </div>
             <div class="text-center">
-              <div class="text-2xl sm:text-3xl font-bold text-purple-500">{{ skills().length || 20 }}+</div>
+              <div class="text-2xl sm:text-3xl font-bold text-purple-500">{{ skills().length || 15 }}+</div>
               <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">Tecnologías</div>
             </div>
           </div>
 
           <!-- CTA Buttons -->
           <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <a 
-              routerLink="/projects"
-              class="group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-400 hover:to-blue-400 text-white font-semibold rounded-xl hover:shadow-2xl hover:shadow-emerald-500/25 transform hover:scale-[1.02] transition-all duration-500 ease-out bg-[length:200%_200%] hover:animate-[gradient_3s_ease_infinite] text-sm sm:text-base"
+            <button 
+              *ngIf="profile()?.academicCvUrl || profile()?.resumeUrl"
+              (click)="downloadCV()"
+              class="group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-400 hover:to-blue-400 text-white font-semibold rounded-xl hover:shadow-2xl hover:shadow-emerald-500/25 transform hover:scale-[1.02] transition-all duration-500 ease-out bg-[length:200%_200%] hover:animate-[gradient_3s_ease_infinite] text-sm sm:text-base cursor-pointer"
             >
-              <span>Ver Proyectos</span>
-              <svg class="ml-2 w-4 sm:w-5 h-4 sm:h-5 group-hover:translate-x-1 transition-transform duration-300 ease-out" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </a>
+              <span>Descargar CV</span>
+              <fa-icon [icon]="faDownload" class="ml-2 w-4 sm:w-5 h-4 sm:h-5 group-hover:translate-y-[-2px] transition-transform duration-300 ease-out"></fa-icon>
+            </button>
             
             <a 
               routerLink="/contact"
               class="group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 font-semibold rounded-xl transition-all duration-500 ease-out hover:scale-[1.02] text-sm sm:text-base"
             >
               <span>Contactar</span>
-              <svg class="ml-2 w-4 sm:w-5 h-4 sm:h-5 group-hover:translate-x-1 transition-transform duration-300 ease-out" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
+              <fa-icon [icon]="faComments" class="ml-2 w-4 sm:w-5 h-4 sm:h-5 group-hover:translate-x-1 transition-transform duration-300 ease-out"></fa-icon>
             </a>
           </div>
 
@@ -100,7 +98,7 @@
                 target="_blank"
                 class="group w-10 sm:w-12 h-10 sm:h-12 bg-slate-100 dark:bg-slate-800 hover:bg-gradient-to-r hover:from-emerald-500 hover:to-blue-500 text-slate-600 dark:text-slate-300 hover:text-white rounded-xl flex items-center justify-center transition-all duration-500 ease-out hover:scale-[1.05] hover:shadow-lg bg-[length:200%_200%] hover:animate-[gradient_3s_ease_infinite]"
               >
-                <span class="text-base sm:text-lg font-bold group-hover:scale-[1.05] transition-transform duration-300 ease-out">{{ getSocialIcon(social.platform) }}</span>
+                <fa-icon [icon]="getSocialIcon(social.platform)" class="text-base sm:text-lg group-hover:scale-[1.05] transition-transform duration-300 ease-out"></fa-icon>
               </a>
             </div>
           </div>
@@ -122,7 +120,8 @@
                 <div class="w-full h-full bg-white dark:bg-slate-900 rounded-3xl overflow-hidden">
                   <app-progressive-image
                     [src]="(profile()?.profileImageUrl || '/assets/profile/mario-jesus.jpg') + '?v=' + imageKey()"
-                    [alt]="(profile()?.firstName || 'Mario') + ' ' + (profile()?.lastName || 'Jesús')"
+                    [alt]="(profile()?.firstName || 'Mario') + ' ' + (profile()?.lastName || 'Jesús') + ' - Foto de perfil'"
+                    [title]="(profile()?.firstName || 'Mario') + ' ' + (profile()?.lastName || 'Jesús')"
                     [placeholderSrc]="'/assets/profile/mario-jesus-low.jpg'"
                     [blurAmount]="5"
                     [transitionDuration]="300"
@@ -140,8 +139,8 @@
                   </svg>
                 </div>
                 <div>
-                  <div class="text-xs lg:text-sm font-bold text-slate-800 dark:text-white">Top Developer</div>
-                  <div class="text-xs text-slate-500 dark:text-slate-400">2025</div>
+                  <div class="text-xs lg:text-sm font-bold text-slate-800 dark:text-white">Estudiante</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">{{ profile()?.currentSemester }}° Semestre</div>
                 </div>
               </div>
             </div>
@@ -151,13 +150,102 @@
     </div>
   </section>
 
-  <!-- Skills Section -->
-  <section class="py-24 bg-slate-50 dark:bg-slate-800/50 relative overflow-hidden">
-    <!-- Background Pattern -->
+  <!-- Residency Information Section -->
+  <section id="residency-section" class="py-24 bg-slate-50 dark:bg-slate-800/50 relative overflow-hidden">
     <div class="absolute inset-0 opacity-5">
       <div class="w-full h-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800"></div>
     </div>
     
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-20">
+        <h2 class="text-4xl lg:text-5xl font-black text-slate-900 dark:text-white mb-6">
+          Residencia 
+          <span class="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Profesional</span>
+        </h2>
+        <p class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+          Información sobre mi búsqueda de residencia profesional y áreas de interés
+        </p>
+      </div>
+
+      <div *ngIf="residencyInfo()" class="grid lg:grid-cols-2 gap-12 mb-16">
+        <!-- Residency Details -->
+        <div class="space-y-8">
+          <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700">
+            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Información de Residencia</h3>
+            
+            <div class="space-y-4">
+              <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700 rounded-xl">
+                <span class="font-medium text-slate-700 dark:text-slate-300">Duración</span>
+                <span class="text-slate-900 dark:text-white font-semibold">
+                  {{ formatDuration(residencyInfo()?.duration === 'short_term' ? 3 : 
+                     residencyInfo()?.duration === 'medium_term' ? 6 : 12) }}
+                </span>
+              </div>
+              
+              <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700 rounded-xl">
+                <span class="font-medium text-slate-700 dark:text-slate-300">Inicio Preferido</span>
+                <span class="text-slate-900 dark:text-white font-semibold">
+                  {{ formatDate(residencyInfo()?.preferredStartDate!)[0].toUpperCase() + formatDate(residencyInfo()?.preferredStartDate!).slice(1) }}
+                </span>
+              </div>
+              
+              <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700 rounded-xl">
+                <span class="font-medium text-slate-700 dark:text-slate-300">Universidad</span>
+                <span class="text-slate-900 dark:text-white font-semibold">{{ profile()?.university }}</span>
+              </div>
+              
+              <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700 rounded-xl">
+                <span class="font-medium text-slate-700 dark:text-slate-300">Carrera</span>
+                <span class="text-slate-900 dark:text-white font-semibold">{{ profile()?.degree }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Areas of Interest -->
+          <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700">
+            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Áreas de Interés</h3>
+            <div class="flex flex-wrap gap-3">
+              <span 
+                *ngFor="let area of residencyInfo()?.areasOfInterest; trackBy: trackByIndex"
+                class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-blue-500 text-white rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                {{ getAreaText(area) }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Objectives and Benefits -->
+        <div class="space-y-8">
+          <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700">
+            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Objetivos</h3>
+            <ul class="space-y-3">
+              <li 
+                *ngFor="let objective of residencyInfo()?.objectives; trackBy: trackByIndex"
+                class="flex items-start space-x-3">
+                <div class="w-2 h-2 bg-emerald-500 rounded-full mt-2 flex-shrink-0"></div>
+                <span class="text-slate-600 dark:text-slate-300">{{ objective }}</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700">
+            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Lo que Aporto</h3>
+            <ul class="space-y-3">
+              <li 
+                *ngFor="let benefit of residencyInfo()?.benefits?.forCompany; trackBy: trackByIndex"
+                class="flex items-start space-x-3">
+                <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                <span class="text-slate-600 dark:text-slate-300">{{ benefit }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="py-24 bg-white dark:bg-slate-900 relative overflow-hidden">
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-20">
         <h2 class="text-4xl lg:text-5xl font-black text-slate-900 dark:text-white mb-6">
@@ -184,12 +272,11 @@
           
           <div class="flex flex-col items-center text-center space-y-4">
             <div class="w-16 h-16 flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-600 rounded-xl group-hover:scale-[1.05] transition-transform duration-400 ease-out">
-              <img 
-                [src]="skill.iconUrl" 
-                [alt]="skill.name"
-                class="w-10 h-10 object-contain"
-                loading="lazy"
-              />
+              <fa-icon 
+                [icon]="getTechnologyIcon(skill.name)" 
+                [class]="'text-3xl transition-all duration-400 ease-out ' + getTechnologyColor(skill.name) + ' group-hover:scale-110'"
+                [title]="skill.name"
+              ></fa-icon>
             </div>
             
             <div>
@@ -213,15 +300,15 @@
   </section>
 
   <!-- Featured Projects Section -->
-  <section class="py-24 bg-white dark:bg-slate-900 relative overflow-hidden">
+  <section class="py-24 bg-slate-50 dark:bg-slate-800/50 relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-20">
         <h2 class="text-4xl lg:text-5xl font-black text-slate-900 dark:text-white mb-6">
           Proyectos 
-          <span class="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">destacados</span>
+          <span class="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Académicos</span>
         </h2>
         <p class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
-          Una selección de mis trabajos más recientes y significativos
+          Una selección de mis proyectos académicos y personales más significativos
         </p>
       </div>
 
@@ -234,21 +321,22 @@
           <div class="relative h-48 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800 overflow-hidden">
             <img 
               [src]="project.imageUrl" 
-              [alt]="project.title"
+              [alt]="project.title + ' - Imagen del proyecto'"
+              [title]="project.title + ' - Proyecto'"
               class="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-700 ease-out"
               loading="lazy"
             />
             
-            <!-- Status Badge -->
+            <!-- Context Badge -->
             <div class="absolute top-4 left-4">
               <span 
                 [class]="'px-3 py-1 text-xs font-semibold rounded-full ' + 
-                (project.status === 'completed' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300' :
-                 project.status === 'in_progress' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' :
-                 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300')"
+                (project.context === 'academic' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' :
+                 project.context === 'personal' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300' :
+                 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300')"
               >
-                {{ project.status === 'completed' ? 'Completado' : 
-                   project.status === 'in_progress' ? 'En progreso' : 'Planeado' }}
+                {{ project.context === 'academic' ? 'Académico' : 
+                   project.context === 'personal' ? 'Personal' : 'Residencia' }}
               </span>
             </div>
           </div>

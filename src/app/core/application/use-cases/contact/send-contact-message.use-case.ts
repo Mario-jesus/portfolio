@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, switchMap } from 'rxjs';
-import { ContactMessage } from '../../../domain/entities/contact.entity';
+import { ContactMessage, MessageType } from '../../../domain/entities/contact.entity';
 import { ContactRepository, EmailService } from '../../../domain/ports/contact.repository';
 
 export interface SendContactMessageRequest {
@@ -8,6 +8,7 @@ export interface SendContactMessageRequest {
   email: string;
   subject: string;
   message: string;
+  messageType: MessageType;
   phoneNumber?: string;
   company?: string;
 }
@@ -16,10 +17,8 @@ export interface SendContactMessageRequest {
   providedIn: 'root'
 })
 export class SendContactMessageUseCase {
-  constructor(
-    private contactRepository: ContactRepository,
-    private emailService: EmailService
-  ) {}
+  private contactRepository = inject(ContactRepository);
+  private emailService = inject(EmailService);
 
   execute(request: SendContactMessageRequest): Observable<ContactMessage> {
     // Validaciones
